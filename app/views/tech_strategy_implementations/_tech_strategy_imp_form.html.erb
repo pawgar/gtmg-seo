@@ -1,0 +1,69 @@
+<%= form_for(@tech_strat_imp, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+
+<div class="box-body">
+      <div class="col-md-12">
+         <div class="form-group">
+            <label>Client</label>
+            <%= f.collection_select(:client_id, Client.all.order(:name), :id, :name, {prompt: false}, {class: 'form-control'}) %>
+         </div>
+      </div>
+      
+      <div class="col-md-12">
+         <div class="form-group">
+            <label>Technical Strategy</label>
+            <%= f.collection_select(:technical_strategy_id, TechnicalStrategy.all.order(:id), :id, :description, {prompt: false}, {class: 'form-control'}) %>
+         </div>
+      </div>
+
+      <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :created_at, "<i class='fa fa-calendar margin-r-5'> </i> Date".html_safe %>
+            <%= f.text_field :created_at, id: "datepicker", class: 'form-control', value: "#{f.object.created_at.strftime("%Y-%m-%d") unless f.object.new_record? }" %>
+          </div>
+      </div>
+
+
+      <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :status, "<i class='fa fa-exclamation-triangle margin-r-5'> </i> Status".html_safe %>
+            <%= f.select :status, options_for_select(TechStrategyImplementation.statuses.map {|k, v| [k.humanize.capitalize, k]}, {selected: @tech_strat_imp[:status]}), {}, { class: 'form-control' } %>
+          </div>
+      </div>
+
+
+
+      <div class="col-md-12">
+          <div class="form-group">
+            <%= f.label :comments, "<i class='fa fa-commenting margin-r-5'> </i> Comment".html_safe %>
+            <%= f.text_area :comments, class: 'form-control', rows: 4 %>
+          </div>
+      </div>
+      
+      
+</div>
+  <div class="box-footer">
+      <div class="actions">
+         <%= f.button  @tech_strat_imp.new_record? ? "Submit" : "Update", :class => "btn btn-block btn-primary", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."} %>
+         <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+      
+      </div>
+  </div>
+<% end %>
+
+<script>
+    $(document).ready(
+      
+      /* This is the function that will get executed after the DOM is fully loaded */
+      function () {
+        $( "#datepicker" ).datepicker({
+          changeMonth: true,//this option for allowing user to select month
+          changeYear: true, //this option for allowing user to select from year range
+          format: "yyyy-mm-dd"
+        });
+      }
+    
+    );
+</script>

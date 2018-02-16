@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <title>Admin Dashboard</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag "application", 'https://fonts.googleapis.com/css?family=Source+Sans+Pro', :media => "all" %>
+  <%= csrf_meta_tags %>
+    
+    <meta name="google-site-verification" content="xBlmqIx8m3J5SC7FjfbYDtPD0kwxG32Q7170vAtfV9Q" />
+</head>
+
+<body class="hold-transition login-page">
+    <%= yield %>
+</body>
+
+
+
+
+
+</html>

@@ -1,0 +1,1095 @@
+<div class="row">
+
+   <div class="col-md-12">
+      <div class="box box-primary">
+         <div class="box-header with-border">
+            <i class="fa fa-th text-blue"></i>
+
+            <% if @client_info.nil? %>
+              <h1 class="box-title"> No valid analytic ID!</h1>
+            <% else %>
+              <h1 class="box-title"> <%= @client_info.name if @client_info.present? %> (Google Analytics)</h1>
+            <% end %>
+
+            <div class="box-tools pull-right">
+               <div class="btn-group">
+                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    Client Selection
+                    <i class="fa fa-sort-down"></i></button>
+                  <ul class="dropdown-menu" role="menu">
+
+                  <% if @session_user_info.Administrator? %>
+
+                     <% Client.where.not(ga_profile_id: nil).order(:name).each do |x| %>
+                     <li><%= link_to x.name, dashboard_path(client: x.id) %></li>
+                     <% end %>
+
+                  <% else %>
+
+                     <% @session_user_info.clients.where.not(ga_profile_id: nil).order(:name).each do |x| %>
+                     <li><%= link_to x.name, dashboard_path(client: x.id) %></li>
+                     <% end %>
+
+                  <% end %>
+
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!-- /.box-header -->
+      </div>
+      <!-- /.box -->
+   </div>
+</div>
+
+
+
+<% if @client_info.present? %>
+
+<script>
+(function(w,d,s,g,js,fjs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+}(window,document,'script'));
+</script>
+
+
+
+   <div class="row">
+
+      <div class="col-sm-12 col-md-12">
+         <div class="box box-solid">
+            <div class="box-body">
+
+              <div class="col-sm-12">
+               <h4 style="background-color:#3c8dbc; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                  <span class="text-white"> Active Users </span>
+               </h4>
+               <div class="col-sm-12 col-md-3 class="text-center"">
+                <h4 class="text-center">Right Now</h4>
+                <h1 class="text-center"> 
+                  <%= @realtime.total_results if @realtime.rows.present? %>
+                  <%= "0" if @realtime.rows.nil? %>
+                </h1>
+                <h5 class="text-center">active users on site</h5>
+               </div>
+
+               <div class="col-sm-12 col-md-9">
+              <table class="table table-striped">
+                 <tbody>
+                    <tr>
+                       <th>Medium</th>
+                       <th>Source</th>
+                       <th>Country</th>
+                       <th>User</th>
+                    </tr>
+
+                    <% if @realtime.rows.present? %>
+                      <% @realtime.rows.each_with_index do |analytics, i| %>
+                      <tr>
+                         <td> <%= analytics[0] %></td>
+                         <td><%= analytics[1] %></td>
+                         <td>
+                          <%= analytics[2] %>
+                         </td>
+                         <td><%= analytics[3] %></td>
+                      </tr>
+                      <% end %>
+
+                    <% else %>
+                        <tr>
+                       <td colspan="4" class="text-center"> There is no data for this view </td>
+                    </tr>
+                    <% end %>
+
+                 </tbody>
+              </table>
+
+            </div>
+            </div> <!-- end of realtime data-->
+
+
+
+            <div class="col-sm-12">
+              <hr>
+              <div class="nav-tabs-custom">
+                <!-- Tabs within a box -->
+
+                <ul class="nav nav-tabs ga_charts">
+
+                  <li class="pull-right"><a href="#session-duration" data-toggle="tab" id="chart7">
+                    Session Duration
+
+                     <h3><%= formatted_duration(@data_30days_total.rows.first[3].to_i) %></h3>
+                     <h5 class="<%= change_up?(@pc_result_avgSessionDuration)[1] %>">
+                      <%= change_up?(@pc_result_avgSessionDuration)[0].html_safe %>
+                      <%= number_with_precision(@pc_result_avgSessionDuration.abs, precision: 1)%> %</h5>
+                    <span>vs last 30 days</span>
+                    </a>
+                  </li>
+
+                  <li class="pull-right"><a href="#bounce-rate" data-toggle="tab">
+                      Bounce Rate
+
+                      <h3><%= number_with_precision(@data_30days_total.rows.first[2], :precision => 2) %>%</h3>
+                      <h5 class="<%= change_down?(@pc_result_bounceRate)[1] %>">
+                        <%= change_down?(@pc_result_bounceRate)[0].html_safe %>
+                        <%= number_with_precision(@pc_result_bounceRate.abs, precision: 1) %>%
+                      </h5>
+                      <span>vs last 30 days</span>
+                      </a>
+                  </li>
+
+                  <li class="pull-right"><a href="#sessions" data-toggle="tab">
+                      Sessions 
+
+                      <h3><%= @data_30days_total.rows.first[1] %></h3>
+                      <h5 class="<%= change_up?(@pc_result_sessions)[1] %>">
+                        <%= change_up?(@pc_result_sessions)[0].html_safe %>
+                        <%= number_with_precision(@pc_result_sessions.abs, precision: 1) %>%
+                      </h5>
+                    <span>vs last 30 days</span>
+                    </a>
+                  </li>
+
+                  <li class="pull-right active"><a href="#users" data-toggle="tab">
+                      Users
+
+                      <h3><%= @data_30days_total.rows.first[0] %></h3>
+                      <h5 class="<%= change_up?(@pc_result_users)[1] %>">
+                        <%= change_up?(@pc_result_users)[0].html_safe %>
+                        <%= number_with_precision(@pc_result_users.abs, precision: 1) %>% </h5>
+                    <span>vs last 30 days</span>
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="tab-content no-padding">
+                  <h4 style="margin-left: 20px"> <i class="fa fa-bar-chart"> </i>Overview — Last 30 days </h4>
+                  <div class="tab-pane active" id="users">
+                    <div class="box box-solid">
+                      <div class="box-body" id="chart-box">
+                        <div id="container_users" class="chart" style="min-width: 310px; height: 315px; margin: 0 auto"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="tab-pane" id="sessions">
+                    <div class="box box-solid">
+                      <div class="box-body" id="chart-box">
+                        <div id="container_sessions" class="chart" style="min-width: 310px; height: 315px; margin: 0 auto"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="tab-pane" id="bounce-rate">
+                    <div class="box box-solid">
+                      <div class="box-body" id="chart-box">
+                        <div id="container_bounceRate" class="chart" style="min-width: 310px; height: 315px; margin: 0 auto"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="tab-pane" id="session-duration">
+                    <div class="box box-solid">
+                      <div class="box-body" id="chart-box">
+                        <div id="container_sessionDuration" class="chart" style="min-width: 310px; height: 315px; margin: 0 auto"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div><!-- /.nav-tabs-custom -->
+            </div>
+
+            </div>
+         </div>
+
+      </div>
+
+
+
+      <div class="col-sm-12 col-md-6">
+         <div class="box box-solid">
+            <div class="box-body">
+               <h4 style="background-color:#3c8dbc; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                  <span class="text-white"> Most Popular Demos/Tools</span><br/>
+                  <small class="text-white">Pageviews - last 30 days</small>
+               </h4>
+
+               <div id="chart-2-container"></div>
+            </div>
+         </div>
+      </div>
+
+      <div class="col-sm-12 col-md-6">
+         <div class="box box-solid">
+            <div class="box-body">
+               <h4 style="background-color:#3c8dbc; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                  <span class="text-white"> Traffic Sources</span><br/>
+                  <small style="color: white"> - last 30 days</small>
+
+               </h4>
+
+               <div id="chart-3-container"></div>
+            </div>
+         </div>
+      </div>
+
+
+   </div>
+
+
+
+<script>
+
+gapi.analytics.ready(function() {
+
+
+  /**
+   * Authorize the user with an access token obtained server side.
+   */
+  gapi.analytics.auth.authorize({
+    'serverAuth': {
+      'access_token': '<%= @access_token %>'
+    }
+  });
+
+
+
+  /**
+   * Creates a new DataChart instance showing top 5 most popular demos/tools
+   * amongst returning users only.
+   * It will be rendered inside an element with the id "chart-3-container".
+   */
+  var dataChart2 = new gapi.analytics.googleCharts.DataChart({
+    query: {
+      'ids': '<%= @ids %>', // <-- Replace with the ids value for your view.
+      'start-date': '30daysAgo',
+      'end-date': 'today',
+      'metrics': 'ga:pageviews',
+      'dimensions': 'ga:pagePathLevel1',
+      'sort': '-ga:pageviews',
+      'filters': 'ga:pagePathLevel1!=/',
+      'max-results': 7
+    },
+    chart: {
+      'container': 'chart-2-container',
+      'type': 'PIE',
+      'options': {
+        'width': '100%',
+        'pieHole': 4/9,
+      }
+    }
+  });
+  dataChart2.execute();
+
+  var dataChart3 = new gapi.analytics.googleCharts.DataChart({
+    query: {
+      'ids': '<%= @ids %>', // <-- Replace with the ids value for your view.
+      'start-date': '30daysAgo',
+      'end-date': 'today',
+      'metrics': 'ga:users',
+      'dimensions': 'ga:medium',
+      'sort': '-ga:users',
+    },
+    chart: {
+      'container': 'chart-3-container',
+      'type': 'COLUMN',
+      'options': {
+        'width': '100%'
+      }
+    }
+  });
+  dataChart3.execute();
+
+
+});
+
+
+
+
+
+
+
+$(function () {
+
+//==================================== USERS
+
+      var newh = $("#chart-box").height();
+    
+            $( window ).resize(function() {
+
+          newh = $("#chart-box").height();
+            chart1.redraw();
+            chart1.reflow();
+        });
+
+
+    chart1 = Highcharts.chart('container_users', {
+        exporting: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+        xAxis: {
+                crosshair: {
+                    width: 1,
+                    color: 'gray'
+                },
+                type: 'date',
+                tickInterval: 5,
+                categories: [
+                <% @data_30days.rows.each do |x| %>
+                    Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>)
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+                <% end %>
+                ],
+            labels        : {
+                formatter : function() {
+                    return Highcharts.dateFormat('%e. %b', this.value);
+                }    
+            },
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip     : { 
+            shared  : true,
+            useHTML : true,
+
+
+
+    formatter: function() {
+      var s = '';
+      $.each(this.points, function(i, point) {               
+
+        if(this.series.name == 'Previous Month'){
+            date1 = this.point.date;
+            pv = this.y;         
+        }
+        
+        if(this.series.name == 'Users'){
+            date2 = this.x;
+            avgSession = this.y;           
+        }               
+               
+
+        if(this.series.name == 'Users'){
+            s += this.series.name + ': ' +
+            '<b>' + this.y.toFixed(1) + '</b>';           
+        }  
+
+      });
+
+        date = Highcharts.dateFormat('%a %e %b', new Date(date2))  + ' vs ' + Highcharts.dateFormat('%a %e %b', new Date(date1));
+        change = (avgSession - pv);
+        result = (change / pv) * 100;
+
+switch (true) {
+    case Number.isNaN(result) || !Number.isFinite(result):
+        percent_change = "<i class='fa fa-minus text-blue'></i>";
+        break;
+    default:
+        change_res = result.toFixed(1);
+
+          if (change_res > 0){
+            percent_change = "<i class='fa fa-long-arrow-up text-green'></i> <span class='text-green'>" + Math.abs(change_res) + '%</span>';
+           }
+          else if(change_res < 0){
+            percent_change = "<i class='fa fa-long-arrow-down text-red'></i> <span class='text-red'>" + Math.abs(change_res) + '%</span>';
+          }
+          else {
+            percent_change = '0%';
+        }
+}
+ 
+
+      return '<br /><span style="margin-left:5px">' + date + '</span><br /><br />' +
+             '<table class="table"><tr><td>' + s + '</td>' +
+             '<td>' + percent_change + '</td></tr></table>';
+    }
+
+
+
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+
+        series: [{
+            type: 'area',
+            name: 'Users',
+            data: [
+              <% @data_30days.rows.each do |x| %>
+                   { y: <%= x[1] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#3090C7'
+        },
+        {
+            type: 'line',
+            name: 'Previous Month',
+            data: [
+
+              <% @data_last_30days.rows.each do |x| %>
+                   { y: <%= x[1] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_last_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#44A4DB',
+            dashStyle: 'Dash'
+        }]
+    });
+
+//==================================== SESSIONS
+
+    chart1 = Highcharts.chart('container_sessions', {
+        exporting: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+        xAxis: {
+                crosshair: {
+                    width: 1,
+                    color: 'gray'
+                },
+                type: 'date',
+                tickInterval: 5,
+                categories: [
+                <% @data_30days.rows.each do |x| %>
+                    Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>)
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+                <% end %>
+                ],
+            labels        : {
+                formatter : function() {
+                    return Highcharts.dateFormat('%e. %b', this.value);
+                }    
+            },
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip     : { 
+            shared  : true,
+            useHTML : true,
+
+
+
+    formatter: function() {
+      var s = '';
+      $.each(this.points, function(i, point) {               
+
+        if(this.series.name == 'Previous Month'){
+            date1 = this.point.date;
+            pv = this.y;         
+        }
+        
+        if(this.series.name == 'Sessions'){
+            date2 = this.x;
+            avgSession = this.y;           
+        }               
+               
+
+        if(this.series.name == 'Sessions'){
+            s += this.series.name + ': ' +
+            '<b>' + this.y.toFixed(1) + '</b>';           
+        }  
+
+      });
+
+        date = Highcharts.dateFormat('%a %e %b', new Date(date2))  + ' vs ' + Highcharts.dateFormat('%a %e %b', new Date(date1));
+        change = (avgSession - pv);
+        result = (change / pv) * 100;
+
+switch (true) {
+    case Number.isNaN(result) || !Number.isFinite(result):
+        percent_change = "<i class='fa fa-minus text-blue'></i>";
+        break;
+    default:
+        change_res = result.toFixed(1);
+
+          if (change_res > 0){
+            percent_change = "<i class='fa fa-long-arrow-up text-green'></i> <span class='text-green'>" + Math.abs(change_res) + '%</span>';
+           }
+          else if(change_res < 0){
+            percent_change = "<i class='fa fa-long-arrow-down text-red'></i> <span class='text-red'>" + Math.abs(change_res) + '%</span>';
+          }
+          else {
+            percent_change = '0%';
+        }
+}
+ 
+
+      return '<br /><span style="margin-left:5px">' + date + '</span><br /><br />' +
+             '<table class="table"><tr><td>' + s + '</td>' +
+             '<td>' + percent_change + '</td></tr></table>';
+    }
+
+
+
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+
+        series: [{
+            type: 'area',
+            name: 'Sessions',
+            data: [
+              <% @data_30days.rows.each do |x| %>
+                   { y: <%= x[2] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#3090C7'
+        },
+        {
+            type: 'line',
+            name: 'Previous Month',
+            data: [
+
+              <% @data_last_30days.rows.each do |x| %>
+                   { y: <%= x[2] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_last_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#44A4DB',
+            dashStyle: 'Dash'
+        }]
+    });
+
+
+//==================================== Bounce Rate
+
+    chart1 = Highcharts.chart('container_bounceRate', {
+        exporting: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+        xAxis: {
+                crosshair: {
+                    width: 1,
+                    color: 'gray'
+                },
+                type: 'date',
+                tickInterval: 5,
+                categories: [
+                <% @data_30days.rows.each do |x| %>
+                    Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>)
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+                <% end %>
+                ],
+            labels        : {
+                formatter : function() {
+                    return Highcharts.dateFormat('%e. %b', this.value);
+                }    
+            },
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip     : { 
+            shared  : true,
+            useHTML : true,
+
+
+
+    formatter: function() {
+      var s = '';
+      $.each(this.points, function(i, point) {               
+
+        if(this.series.name == 'Previous Month'){
+            date1 = this.point.date;
+            pv = this.y;         
+        }
+        
+        if(this.series.name == 'Bounce Rate'){
+            date2 = this.x;
+            avgSession = this.y;           
+        }               
+               
+
+        if(this.series.name == 'Bounce Rate'){
+            s += this.series.name + ': ' +
+            '<b>' + (this.y/100).toFixed(2) + '</b>';           
+        }  
+
+      });
+
+        date = Highcharts.dateFormat('%a %e %b', new Date(date2))  + ' vs ' + Highcharts.dateFormat('%a %e %b', new Date(date1));
+        change = (avgSession - pv);
+        result = (change / pv) * 100;
+
+switch (true) {
+    case Number.isNaN(result) || !Number.isFinite(result):
+        percent_change = "<i class='fa fa-minus text-blue'></i>";
+        break;
+    default:
+        change_res = result.toFixed(1);
+
+          if (change_res > 0){   //lower bounceRate(-)
+            percent_change = "<i class='fa fa-long-arrow-up text-green'></i> <span class='text-green'>" + Math.abs(change_res) + '%</span>';
+           }
+          else if(change_res < 0){ //higher bounceRate(+)
+            percent_change = "<i class='fa fa-long-arrow-down text-red'></i> <span class='text-red'>" + Math.abs(change_res) + '%</span>';
+          }
+          else {
+            percent_change = '0%';
+        }
+}
+ 
+
+      return '<br /><span style="margin-left:5px">' + date + '</span><br /><br />' +
+             '<table class="table"><tr><td>' + s + '</td>' +
+             '<td>' + percent_change + '</td></tr></table>';
+    }
+
+
+
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+
+        series: [{
+            type: 'area',
+            name: 'Bounce Rate',
+            data: [
+              <% @data_30days.rows.each do |x| %>
+                   { y: <%= x[3] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#3090C7'
+        },
+        {
+            type: 'line',
+            name: 'Previous Month',
+            data: [
+
+              <% @data_last_30days.rows.each do |x| %>
+                   { y: <%= x[3] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_last_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#44A4DB',
+            dashStyle: 'Dash'
+        }]
+    });
+//==================================== Session Duration
+
+
+    chart1 = Highcharts.chart('container_sessionDuration', {
+        exporting: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+        xAxis: {
+                crosshair: {
+                    width: 1,
+                    color: 'gray'
+                },
+                type: 'date',
+                tickInterval: 5,
+                categories: [
+                <% @data_30days.rows.each do |x| %>
+                    Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>)
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+                <% end %>
+                ],
+            labels        : {
+                formatter : function() {
+                    return Highcharts.dateFormat('%e. %b', this.value);
+                }    
+            },
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip     : { 
+            shared  : true,
+            useHTML : true,
+
+
+
+    formatter: function() {
+      var s = '';
+      $.each(this.points, function(i, point) {               
+
+        if(this.series.name == 'Previous Month'){
+            date1 = this.point.date;
+            pv = this.y;         
+        }
+        
+        if(this.series.name == 'Avg Session Duration'){
+            date2 = this.x;
+            avgSession = this.y;           
+        }               
+               
+
+        if(this.series.name == 'Avg Session Duration'){
+            s += this.series.name + ': ' +
+            '<b>' + this.y.toFixed(1) + '</b>';           
+        }  
+
+      });
+
+        date = Highcharts.dateFormat('%a %e %b', new Date(date2))  + ' vs ' + Highcharts.dateFormat('%a %e %b', new Date(date1));
+        change = (avgSession - pv);
+        result = (change / pv) * 100;
+
+switch (true) {
+    case Number.isNaN(result) || !Number.isFinite(result):
+        percent_change = "<i class='fa fa-minus text-blue'></i>";
+        break;
+    default:
+        change_res = result.toFixed(1);
+
+          if (change_res > 0){
+            percent_change = "<i class='fa fa-long-arrow-up text-green'></i> <span class='text-green'>" + Math.abs(change_res) + '%</span>';
+           }
+          else if(change_res < 0){
+            percent_change = "<i class='fa fa-long-arrow-down text-red'></i> <span class='text-red'>" + Math.abs(change_res) + '%</span>';
+          }
+          else {
+            percent_change = '0%';
+        }
+}
+ 
+
+      return '<br /><span style="margin-left:5px">' + date + '</span><br /><br />' +
+             '<table class="table"><tr><td>' + s + '</td>' +
+             '<td>' + percent_change + '</td></tr></table>';
+    }
+
+
+
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+
+        series: [{
+            type: 'area',
+            name: 'Avg Session Duration',
+            data: [
+              <% @data_30days.rows.each do |x| %>
+                   { y: <%= x[4] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#3090C7'
+        },
+        {
+            type: 'line',
+            name: 'Previous Month',
+            data: [
+
+              <% @data_last_30days.rows.each do |x| %>
+                   { y: <%= x[4] %>, date: Date.UTC( <%= DateTime.parse("#{x[0]}").strftime("%Y, %m#{-1}, %-d") %>) }
+                    <%= "," unless x[0] == @data_last_30days.rows.last[0] %>
+              <% end %>
+            ],
+            color: '#44A4DB',
+            dashStyle: 'Dash'
+        }]
+    });
+
+
+//render charts to 100% to its parent .... only for charts inside tabs
+jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function () { 
+    $( '.chart' ).each(function() { 
+        $(this).highcharts().reflow();
+    });
+});
+
+
+});  //end of highcharts function
+
+</script>
+
+
+
+
+<div>
+   <div class="row">
+
+
+      <div class="col-sm-12 col-md-6">
+         <div class="box box-solid">
+            <div class="box-body">
+               <h4 style="background-color:#3c8dbc; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                  <span class="text-white"> Top 10 Traffic Sources </span><br/>
+                  <small style="color: white"> - last 30 days</small>
+               </h4>
+
+              <table class="table table-striped">
+                 <tbody>
+                    <tr>
+                       <th style="width: 10px">#</th>
+                       <th>Source</th>
+                       <th>Country</th>
+                       <th style="width: 40px">Sessions</th>
+                    </tr>
+
+                    <% @traffic_source.rows.each_with_index do |analytics, i| %>
+                    <tr>
+                       <td> <%= i +1 %></td>
+                       <td><%= analytics[1] %></td>
+                       <td>
+                        <%= analytics[0] %>
+                       </td>
+                       <td><%= analytics[2] %></td>
+                    </tr>
+                    <% end %>
+                 </tbody>
+              </table>
+
+            </div>
+         </div>
+      </div>
+
+      <div class="col-sm-12 col-md-6">
+         <div class="box box-solid">
+            <div class="box-body">
+               <h4 style="background-color:#3c8dbc; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                  <span class="text-white"> Top 10 Page Views</span><br/>
+                  <small style="color: white"> - last 30 days</small>
+               </h4>
+
+              <table class="table table-striped">
+                 <tbody>
+                    <tr>
+                       <th>Page Name</th>
+                       <th># Views</th>
+                    </tr>
+
+                    <% @page_views.rows.each_with_index do |analytics, i| %>
+                    <tr>
+                       <td><%= analytics[0] %></td>
+                       <td><%= analytics[1] %></td>
+                    </tr>
+                    <% end %>
+                 </tbody>
+              </table>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<% end %>
+
+<% if @session_user_info.Administrator? %>
+
+  <div class="row">
+     <div class="col-md-12">
+        <div class="box box-success">
+           <div class="box-header with-border">
+              <i class="fa fa-line-chart text-green"></i>
+                <h1 class="box-title"> GTMG-SEO Performance (New Relic) </h1>
+           </div>
+           <!-- /.box-header -->
+        </div>
+        <!-- /.box -->
+     </div>
+  </div>
+
+
+  <%= render "dashboard_admin" %>
+
+
+<% else %>
+
+  <div class="row">
+     <div class="col-md-12">
+        <div class="box box-success">
+           <div class="box-header with-border">
+              <i class="fa fa-th"></i>
+                <h1 class="box-title"> Quick Links </h1>
+           </div>
+           <!-- /.box-header -->
+        </div>
+        <!-- /.box -->
+     </div>
+  </div>
+
+
+  <%= render "dashboard_client" %>
+
+
+
+<% end %>
+
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>

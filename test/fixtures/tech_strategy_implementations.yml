@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  technical_strategy_id: 
+  status: 1
+  comments: MyText
+  website: 1
+
+two:
+  technical_strategy_id: 
+  status: 1
+  comments: MyText
+  website: 1

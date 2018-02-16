@@ -1,0 +1,87 @@
+<% @header_title = "Users" %>
+<% @menu_user = "active" %>
+
+
+          <div class="box">
+            <div class="box-header">
+              <span>
+                <%= link_to "" do %>
+                  Administrator
+                <% end %><small class="label label-primary"><%= User.Administrator.count %></small>
+                |
+                <%= link_to "" do %>
+                  Client
+                <% end %><small class="label label-primary"><%= User.Client.count %></small>
+              </span>
+              <%= link_to new_user_path, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-primary btn-flat pull-right", html: { "data-method" => "get" } do %>
+                <i class="fa fa-user-plus"></i> New User
+              <% end %>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+               
+              <!--input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table"--> 
+              <!-- footable -->
+              <table class="footable table table-stripped table-hover" data-page-size="" data-limit-navigation="" data-filter=#filter>
+                <thead>
+                   <tr>
+                     <th>Name</th>
+                     <th>Email</th>
+                      <th data-hide="phone,tablet">Role</th>
+                      <th data-hide="phone,tablet">Status</th>
+                   </tr>
+                </thead>
+                
+            <tbody>
+            <% @users.each do |user| %>  
+                <tr height="57px" id="user_<%= user.id %>" class="user_listing">
+                  <td width="250px">
+                    
+                    <%= link_to user do %>
+                      <%= user.fullname %> 
+                    <% end %>
+                    
+                      <div id="my_box" class="hidden_option">
+                        <%= link_to user_path(user), title: 'edit' do %>
+                          <i class="fa fa-edit text-blue"></i> 
+                        <% end %>
+                         
+                        <% unless session[:user_id] == user.id %>
+                        :
+                          <%= link_to user, method: :delete, data: { confirm: 'Are you sure?' }, title: 'delete' do %>
+                            <i class="fa fa-trash-o text-red"></i>
+                          <% end %>
+                        <% end %>
+                      </div>
+                      
+                  </td>
+                  <td><%= user.email %></td>
+                  <td><%= user.role %></td>
+                  <td><%= user.status %></td>
+                </tr>
+                
+            <% end %>
+                  </tbody>
+                   <tfoot>
+                    <tr>
+                     <td colspan="6">
+                        <ul class="pagination pull-right">
+                           <%= paginate @users %>
+                           <%= page_entries_info @users %>
+                        </ul>
+                     </td>
+                    </tr>
+                   </tfoot>
+                   
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          
+          
+<script>
+    $(document).ready(function() {
+        $('.footable').footable({ paginate:false });
+        $('.footable2').footable();
+    });
+</script>

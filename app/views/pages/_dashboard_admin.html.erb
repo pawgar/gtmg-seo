@@ -1,0 +1,75 @@
+<!-- This demo uses the Chart.js graphing library and Moment.js to do date
+     formatting and manipulation. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+<!-- Include the ViewSelector2 component script. -->
+<script src="https://ga-dev-tools.appspot.com/public/javascript/embed-api/components/view-selector2.js"></script>
+
+<!-- Include the DateRangeSelector component script. -->
+<script src="https://ga-dev-tools.appspot.com/public/javascript/embed-api/components/date-range-selector.js"></script>
+
+<!-- Include the ActiveUsers component script. -->
+<script src="https://ga-dev-tools.appspot.com/public/javascript/embed-api/components/active-users.js"></script>
+
+<!-- Include the CSS that styles the charts. -->
+<link rel="stylesheet" href="https://ga-dev-tools.appspot.com/public/css/chartjs-visualizations.css">
+
+
+<div class="section">
+    <div class="box box-success">
+            
+        <div class="box-body">
+            <div class="col-md-6">
+                <iframe src="https://rpm.newrelic.com/public/charts/lKprKeVBSm8" width="100%" height="600" scrolling="no" frameborder="no"></iframe>
+            </div>
+            
+            <div class="col-md-6 no-paddin">
+                <div class="col-md-12">
+                    <iframe src="https://rpm.newrelic.com/public/charts/1w5ogU8UhRi" width="100%" height="300" scrolling="no" frameborder="no"></iframe>
+                </div>
+                
+                <div class="col-md-12">
+                    <hr>
+                    <iframe src="https://rpm.newrelic.com/public/charts/deKKbVMCVKm" width="100%" height="300" scrolling="no" frameborder="no"></iframe>
+                </div>
+            </div>
+            
+        </div>
+
+
+    </div>
+</div>
+
+<div class="section">
+    <div class="box box-success">
+            
+        <div class="box-body">
+            <div class="col-md-6">
+                <iframe src="https://rpm.newrelic.com/public/charts/hpQWsi3Ug61" width="100%" height="250" scrolling="no" frameborder="no"></iframe>
+            </div>
+            
+            <div class="col-md-6">
+                <iframe src="https://rpm.newrelic.com/public/charts/cReczxRLM6F" width="100%" height="300" scrolling="no" frameborder="no"></iframe>
+            </div>
+            
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<% if flash[:openModal] %>
+   <script>
+      $ (function()
+      {
+          $('#myModal').modal('show');
+      });
+        
+   </script>
+   
+   <%= render 'shared/error_modal' %>
+   
+<% end %>          

@@ -1,0 +1,16 @@
+KRM
+client_id::  website
+keywords:: string(e.g. american made peptides, glp-1 products)
+date:: (monthly/ February 2017)
+page rank:: (integer)
+
+
+KPI
+Title: string
+Date: datetime
+
+
+
+
+
+

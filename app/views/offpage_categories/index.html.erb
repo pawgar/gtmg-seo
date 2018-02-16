@@ -1,0 +1,79 @@
+<% @header_title = "Off-Page Category" %>
+<%# @menu_user = "active" %>
+
+          <div class="box" id="data-list">
+            <div id="data-list-x">
+            <div class="box-header">
+            
+            <% if @session_user_info.Administrator? %>
+              <%= link_to new_offpage_category_path, remote: true, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-primary btn-flat pull-right margin-left" do %>
+                <i class="fa fa-puzzle-piece"></i> Add Off-Page Category
+              <% end %>
+            <% end %> 
+              <%#= link_to '/import-strategy-form', remote: true, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-success btn-flat pull-right" do %>
+                <!--<i class="fa fa-upload"></i> Upload Excel Sheet-->
+              <%# end %>
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              
+              <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+              <table class="footable table table-stripped table-hover table-bordered is-breakable" data-page-size="500" data-limit-navigation="4" data-filter=#filter>
+                 <thead>
+                    <tr>
+                       <th width="120px">Code Letter</th>
+                       <th width="150px">Category Name</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                       <% @offpage_cat.each do |cat| %>  
+                       <tr height="57px" id="category_<%= cat.id %>" class="user_listing">
+                          <td width="10%">
+                             <%= cat.code_letter.upcase %>
+                             <% if @session_user_info.Administrator? %>
+                                 <div id="my_box" class="hidden_option">
+                                    <%= link_to edit_offpage_category_path(cat.id), remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}, class: "btn btn-box-tool"  do %>
+                                    <i class="fa fa-edit text-blue"></i> 
+                                    <% end %>
+                                    &nbsp; : &nbsp
+                                    <%= link_to cat, method: :delete, data: { confirm: 'Are you sure?' }, title: 'delete' do %>
+                                    <i class="fa fa-trash-o text-red"></i>
+                                    <% end %>
+                                 </div>
+                             <% end %>
+                          </td>
+                          <td width="50%"><%= simple_format(cat.category_name.humanize) %>
+                          </td>
+                       </tr>
+                       <% end %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                       <td colspan="5">
+                          <ul class="pagination pull-right"></ul>
+                       </td>
+                    </tr>
+                  </tfoot>
+                 
+              </table>
+            </div>
+            <!-- /.box-body -->
+            
+
+          </div>
+          </div>
+          
+
+
+
+<script>
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+}
+
+effectLoad();
+
+</script>

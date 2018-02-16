@@ -1,0 +1,62 @@
+<%= form_for(@krm, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+ 
+<% if @krm.errors.full_messages.any? %>    
+    <div id="error_explanation" class="bg-danger text-danger">
+        <div class="box-body">
+            <% @krm.errors.full_messages.each do |message| %>
+                <small><i class="fa fa-times-circle-o margin-r-5"> </i><%= message %></small> <br/>
+            <% end %>
+        </div>
+    </div> 
+<% end %>
+
+<hr>
+
+    <div class="form-group">
+        <%= f.label :client_id, "<i class='fa fa-user margin-r-5'> </i> Client Site".html_safe %>
+        <%#= collection_select(:object, collection, :value_method, :text_method, {}, { :class => 'form-control' }) %>
+        <%= f.collection_select(:client_id, Client.all.order(:name), :id, :name, {prompt: ''}, {class: 'skip-empty form-control'}) %>
+    </div>
+                     
+      <div class="form-group">
+        <%= f.label :keywords, "<i class='fa fa-crosshairs margin-r-5'> </i> Keyword".html_safe %>
+        <%= f.text_area :keywords, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :date, "<i class='fa fa-calendar margin-r-5'> </i> Date".html_safe %>
+        <%= f.text_field :date, class: 'date form-control', placeholder: "#{(DateTime.now.to_date).strftime('%B %Y')}", size: 30, 
+        value: "#{f.object.date.strftime("%b %Y") unless f.object.new_record? }"%>
+      </div>
+
+            
+      <div class="form-group">
+         <%= f.label :page_rank, "<i class='fa fa-line-chart margin-r-5'> </i> Page Rank".html_safe %> 
+         <%= f.text_field :page_rank, class: 'form-control' %>
+      </div>
+      
+  <div class="actions">
+     <%= f.button  @krm.new_record? ? "Add Record" : "Update Record", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+     <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+  </div>
+  
+<% end %>
+
+<script>
+    // https://bootstrap-datepicker.readthedocs.io/en/latest/
+    $(document).ready(function(){
+        
+      $('.date').datepicker({
+          format: "MM yyyy",
+          startView: "months", 
+          minViewMode: "months",
+          todayBtn: "linked",
+      });          
+          
+    });
+    
+</script>

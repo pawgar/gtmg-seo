@@ -1,0 +1,10 @@
+$('#dialog').modal('toggle');
+
+$("#notice_wrapper").show();
+$('#notice_wrapper').append("<p class='notice'><%= notice %> </p>");
+
+setTimeout(function() {
+    $("#notice_wrapper, #error_wrapper").fadeOut('slow').empty();
+}, 4000);
+
+$('#data-list').load(document.URL +  ' #data-list-x', function(){ effectLoad()} );

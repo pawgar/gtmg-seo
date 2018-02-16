@@ -1,0 +1,108 @@
+<% @header_title = "Strategies" %>
+<%# @menu_user = "active" %>
+
+          <div class="box" id="strategy_list">
+            <div id="strategy_list_x">
+            <div class="box-header">
+            
+            <% if @session_user_info.Administrator? %>
+              <%= link_to new_strategy_path, remote: true, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-primary btn-flat pull-right margin-left" do %>
+                <i class="fa fa-puzzle-piece"></i> Add Strategy
+              <% end %>
+            <% end %> 
+              <%#= link_to '/import-strategy-form', remote: true, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-success btn-flat pull-right" do %>
+                <!--<i class="fa fa-upload"></i> Upload Excel Sheet-->
+              <%# end %>
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              
+              <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+              <table class="footable table table-stripped table-hover table-bordered is-breakable" data-page-size="500" data-limit-navigation="4" data-filter=#filter>
+                 <thead>
+                    <tr>
+                       <th width="120px">Code</th>
+                       <th width="150px">Description</th>
+                       <th width="150px">Category</th>
+                       <th data-hide="phone,tablet" width="130px">Notes</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                       <% @strategies.each do |strat| %>  
+                       <tr height="57px" id="strategy_<%= strat.id %>" class="user_listing">
+                          <td width="10%">
+                             <%= strat.code.upcase %>
+                             <% if @session_user_info.Administrator? %>
+                                 <div id="my_box" class="hidden_option">
+                                    <%= link_to edit_strategy_path(strat.id), remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}, class: "btn btn-box-tool"  do %>
+                                    <i class="fa fa-edit text-blue"></i> 
+                                    <% end %>
+                                    &nbsp; : &nbsp
+                                    <%= link_to strat, method: :delete, data: { confirm: 'Are you sure?' }, title: 'delete' do %>
+                                    <i class="fa fa-trash-o text-red"></i>
+                                    <% end %>
+                                 </div>
+                             <% end %>
+                          </td>
+                          <td width="50%"><%= simple_format(strat.description.humanize) %>
+                             <%#= link_to 'Download as .xlsx', strategies_path(format: :xlsx) %>
+                          </td>
+                          <td> 
+
+                                <% strat.offpage_categories.order("code_letter asc").each do |cat| %> 
+                                  <span id="indi_wrapper">
+                                      <% if @session_user_info.Administrator? %>
+                                        <span class="hidden_option-inline">
+                                          <%= link_to unassignCategory_path(strat, category: cat.id), remote: true, method: :delete, data: { confirm: 'Are you sure?' }, title: 'unassign category' do %>
+                                            <i class="fa fa-trash-o text-red"></i>
+                                          <% end %>
+                                        </span>
+                                      <% end %>
+
+                                          <i class="fa fa-th-large text-primary"></i>
+                                          <strong> <%= cat.code_letter %></strong>
+                                          : <%= cat.category_name %><hr class="margin-5">
+                                  </span>
+                                <% end %>
+
+                              <% if @session_user_info.Administrator? %>
+                                <div id="my_box" class="hidden_option">
+                                  <%= link_to 'Add Category', new_strategy_offpage_category_path(strategy: strat), remote: true %>
+                                </div>
+                              <% end %>
+
+                          </td>
+                          <td ><%= simple_format(strat.notes.humanize) %></td>
+                       </tr>
+                       <% end %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                       <td colspan="5">
+                          <ul class="pagination pull-right"></ul>
+                       </td>
+                    </tr>
+                  </tfoot>
+                 
+              </table>
+            </div>
+            <!-- /.box-body -->
+            
+
+          </div>
+          </div>
+          
+
+
+
+<script>
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+}
+
+effectLoad();
+
+</script>

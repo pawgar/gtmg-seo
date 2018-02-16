@@ -1,0 +1,110 @@
+<% @header_title = "Clients" %>
+<%# @menu_user = "active" %>
+
+                
+          <div class="box box-primary" id="client_list">
+            <div id="client_list_x">
+            <div class="box-header">
+              <%= link_to new_client_path, remote: true, class: "btn btn-primary btn-flat pull-right margin-left", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."} do %>
+                <i class="fa fa-link fa-w"></i> Add New Client Site
+              <% end %>
+              
+              <%#= link_to '/import-strategy-form', remote: true, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-success btn-flat pull-right" do %>
+                <!--<i class="fa fa-upload"></i> Upload Excel Sheet-->
+              <%# end %>
+              
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              
+              <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+        
+                  <table class="footable table table-stripped table-hover table-bordered is-breakable" data-page-size="30" data-limit-navigation="4" data-filter=#filter>
+                     <thead>
+                        <tr>
+                           <th>Website Name/ URL</th>
+                           <th>Code</th>
+                           <th>Analytics View ID</th>
+                           <th data-hide="phone" >Notes</th>
+                           <th data-hide="phone">Assigned User</th>
+                        </tr>
+                     </thead>
+ 
+                    <tbody>
+                            <% @clients.each do |client| %>  
+                                <tr height="57px" id="strategy_<%= client.id %>" class="user_listing">
+                                  <td width="250px">
+                                    
+                                    <%= link_to client do %>
+                                     <%= (client.name).upcase %> 
+                                    <% end %>
+                                    
+                                      <div id="my_box" class="hidden_option">
+                                        <%= link_to client_path(client.id), title: 'edit' do %>
+                                          <i class="fa fa-edit text-blue"></i> 
+                                        <% end %>
+                                        &nbsp; : &nbsp
+                                          <%= link_to client, method: :delete, data: { confirm: 'Are you sure you want to delete this client? (All users will be unassigned.)' }, title: 'delete' do %>
+                                            <i class="fa fa-trash-o text-red"></i>
+                                          <% end %>
+                                      </div>
+                                      
+                                  </td>
+                                  <td><%= client.code %></td>
+                                  <td><%= client.ga_profile_id %></td>
+                                  <td><%= client.notes %></td>
+                                  <td width="350px">
+                                    <% client.client_users.each do |u| %>
+                                    <span title="<%= "Owner" if u.Owner? %>">
+                                      <% if u.Owner? %>
+                                        <i class="fa  fa-black-tie text-orange fa-fw"></i>
+                                      <% else %>
+                                        <i class="fa fa-user text-green fa-fw"></i>
+                                      <% end %>
+                                        <%= u.user.fullname %> 
+                                        <% if u.user.id == @session_user_info.id %>
+                                            <small class="label label-primary">me</small>
+                                        <% end %>
+
+                                        <br/>
+                                        
+                                        <small> <%= u.user.email %></small>
+                                      </span>
+                                        <hr class="no-margin">
+                                    <% end %>
+                                  </td>
+                                </tr>
+                                
+                            <% end %>
+                    </tbody>
+                     <tfoot>
+                      <tr>
+                         <td colspan="5">
+                              <ul class="pagination pull-right"></ul>
+                         </td>
+                      </tr>
+                     </tfoot>
+                   
+              </table>
+            </div>
+            <!-- /.box-body -->
+            
+            <div class="box-footer clearfix" >
+
+            </div>
+            
+
+          </div>
+          </div>
+          
+<script>
+
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+}
+
+effectLoad();
+</script>

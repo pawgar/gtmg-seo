@@ -1,0 +1,71 @@
+<style>
+  .section{
+    margin-left: 15px!important;
+    margin-right: 15px!important;
+  }
+
+  th.fixed, td.fixed{
+    min-width: 250px!important;
+  }
+
+  thead { display: table-header-group }
+  tfoot { display: table-row-group }
+  tr { page-break-inside: avoid }
+
+  table{
+    font-size: 12px!important;
+  }
+
+</style>
+
+<%
+if params[:start_date] || params[:end_date]
+  krm_collect = @krms.collect{|v| v[1].map{|b| b.date}}.join(',').split(',').uniq.sort
+else
+  krm_collect = @krms.collect{|v| v[1].map{|b| b.date}}.join(',').split(',').uniq.sort#.last(3)
+end
+%>
+
+<h3 style="text-align: center; margin-bottom: 40px"> <%= @fSiteInfo_name %> </h3>
+<div class="section">
+
+                    <table class="table table-striped" style="border: 1px solid #f6f8fa">
+                      <thead>
+                      <tr>
+                        <th class="">
+                       Keywords
+                      </th>
+                              <% krm_collect.each do |month| %>
+                                  <th data-hide="" > 
+                                    <%= month.to_date.strftime('%b %Y') %>
+                                  </th>
+                              <% end %>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                            <% @krms.sort_by{|k| k[0].downcase}.each_with_index do |krm, i| %>
+                            <tr height="">
+                               <div>
+	                               <td class="fixed">
+	                                <%= krm[0] %>
+	                               </td>
+
+	                              <% krm_collect.each do |month| %>
+	                               <% data = krm[1].select { |m| m.date == month }.first %>
+	                                  <td class="box-tools" >
+
+	                                  <% if data.present? %>
+	                                        <span data-toggle='tooltip' title='<%= data.date.strftime('%b %Y') %>'>
+	                                          <%= data.page_rank %> 
+	                                        </span>
+	                                  <% end %>
+
+	                                  </td>
+	                               <% end %>
+	                            </div>
+                                </tr>
+                              <% end %>
+                        </tbody>
+                    </table>
+</div>

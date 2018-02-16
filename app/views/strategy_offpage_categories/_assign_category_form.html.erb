@@ -1,0 +1,26 @@
+<%= form_for(@strat_category, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+
+
+      <div class="form-group">
+                     <select name="strategy_offpage_category[offpage_category_id]" class="skip-empty form-control">
+                        <% OffpageCategory.all.order(:code_letter).each do |x| %>
+                          <option value="<%= x.id %>"> <%= x.code_letter.upcase %>: <%= x.category_name %></option>
+                        <% end %>
+                     </select>
+
+                     <input type="hidden" name="strategy_offpage_category[strategy_id]" value="<%= params[:strategy] %>" >
+      </div>
+      
+      <div class="form-group">
+      </div>
+      
+      
+  <div class="actions">
+     <%= f.button  @strat_category.new_record? ? "Assign Category" : "Update Category", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+     <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+  </div>
+<% end %>

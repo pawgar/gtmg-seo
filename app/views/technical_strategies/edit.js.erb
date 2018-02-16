@@ -1,0 +1,13 @@
+// Add the dialog title
+$('#dialog h3').html("<i class='fa fa-fw fa-edit'></i> Edit Technical Strategy");
+ 
+// Render the edit form
+$('.modal-body').html('<%= j render("technical_strategy_form") %>');
+ 
+// Show the dynamic dialog
+$('#dialog').modal("show");
+ 
+// Set focus to the first element
+$('#dialog').on('shown.bs.modal', function () {
+	  $('.first_input').focus()
+  })

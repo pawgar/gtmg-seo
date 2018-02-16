@@ -1,0 +1,54 @@
+<style>
+  .section{
+    margin-left: 15px!important;
+    margin-right: 15px!important;
+  }
+
+  th.fixed, td.fixed{
+    min-width: 250px!important;
+  }
+
+  thead { display: table-header-group }
+  tfoot { display: table-row-group }
+  tr { page-break-inside: avoid }
+
+  table{
+    font-size: 12px!important;
+  }
+
+</style>
+
+
+<h3 style="text-align: center; margin-bottom: 40px"> <%= @header_title %> </h3>
+
+
+<div class="section">
+  <table class="table table-striped" id="to_pdf" style="border: 1px solid #f6f8fa">
+    <thead>
+      <tr>
+        <th width="120px">Description</th>
+        <th width="150px" data-hide="phone,tablet">Date</th>
+        <th width="130px" data-hide="phone,tablet">Status</th>
+        <th width="130px" data-hide="phone,tablet">Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tech_strat.each do |imp| %>
+        <tr class="box-tools" height="70px">
+          <td> 
+              <%= imp.technical_strategy_id.present? ? simple_format(imp.technical_strategy.description) : "<i class='text-red'>Record not found! Please update or delete this record.</i>".html_safe %>
+          </td>
+          <td>
+            <%= imp.created_at.strftime( '%Y-%m-%d') %>
+          </td>
+          <td>
+            <%= imp.status %>
+          </td>
+          <td>
+            <%= imp.comments %>
+          </td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>

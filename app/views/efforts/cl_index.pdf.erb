@@ -1,0 +1,110 @@
+<style>
+  .section{
+    margin-left: 15px!important;
+    margin-right: 15px!important;
+  }
+
+  th.fixed, td.fixed{
+    min-width: 250px!important;
+  }
+
+  thead { display: table-header-group }
+  tfoot { display: table-row-group }
+  tr { page-break-inside: avoid }
+
+  table{
+    font-size: 12px!important;
+  }
+
+.is-breakable td{
+  /* For Chrome and IE */
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */ 
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  white-space: pre-wrap;       /* css-3 */
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  white-space: normal;
+  -moz-hyphens:auto;
+  -ms-hyphens:auto;
+  -webkit-hyphens:auto;
+  hyphens:auto;
+
+  /* For Firefox */
+  word-break: break-word;
+}
+
+.margin-5{
+  margin: 5px 0 5px 0;
+}
+
+</style>
+
+
+<h3 style="text-align: center; margin-bottom: 40px"> <%= @header_title %></h3>
+
+
+<div class="section">
+  <table class="table table-striped is-breakable" style="border: 1px solid #f6f8fa">
+         <thead>
+            <tr>
+               <th width="200px">Date</th>
+               <th width="250px">Task</th>
+               <th width="250px">Category</th>
+               <th width="200px">Assigned User</th>
+               <th width="150px">Notes</th>
+               <th width="500px">Status Url</th>
+               <th width="500px">QA Feedback</th>
+            </tr>
+         </thead>
+    <tbody>
+      <% @effort.each do |effort| %>
+        <tr class="box-tools" height="70px">
+          <td> 
+              <%= effort.date.strftime('%Y-%m-%d') if effort.date.present? %>
+          </td>
+          <td>
+                  <% if effort.strategy  %>
+                     <b><%= effort.strategy.code %></b>: 
+                     <%= effort.strategy.description.humanize %>
+                  <% end %>
+          </td>
+
+          <td>
+            <% if effort.strategy %>
+                <% effort.strategy.offpage_categories.each do |cat| %> 
+                    <%= cat.category_name %><hr class="margin-5">
+                <% end %>
+            <% end %>
+          </td>
+
+          <td>
+            <%= effort.user.fullname.humanize if effort.user_id.present? %>
+          </td>
+          <td> <%= effort.notes.humanize rescue "" %> </td>
+          <td>
+                  <% if effort.status_url.present? %>
+                    <% effort.status_url.each_line do |line| %>
+                        <% if is_valid_url(line.strip) %>
+                           <%= link_to line, target: '_blank' do %>
+                              <p><%= line %></p>
+                           <% end %>  
+                        <% else %>
+                           <p><%= line.humanize %></p>
+                        <% end %>
+                     <% end %>
+                  <% end %>
+          </td>
+
+          <td>
+              <%= simple_format(effort.qa.humanize) rescue "" %>
+              <% if effort.qa.nil? %>
+                  <%= simple_format(effort.qa_comments.first.comment) rescue "" %>
+              <% end %>
+          </td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>

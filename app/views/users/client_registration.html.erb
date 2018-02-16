@@ -1,0 +1,88 @@
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>GTMG</b>SEO</a>
+  </div>
+  
+  <% if alert %>
+  <div class="box box-solid">
+    <div class="login_error">
+         <%= alert.html_safe %>
+    </div>
+  </div>
+  <% elsif notice %>
+  <div class="box box-solid">
+    <div class="login_notice">
+         <%= notice.html_safe %>
+    </div>
+  </div>
+  <% end %>
+
+
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+      <div class="box-header no-padding">
+          <h3 class="login-box-msg pull-left no-padding">Sign up now</h3><i class="fa fa-pencil pull-right"></i><br/><br/>
+          <span class="login-box-msg pull-left no-padding">Fill in the form below to get instant access.</span><br/><br/>
+      </div>
+    
+        
+        
+     
+    <%= form_for @user, url: {controller: "users", action: "create_client"} do |f| %>
+  
+    
+      <div class="form-group has-feedback">
+        <%= f.text_field :firstname, class: "form-control", placeholder: "First name" %>
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+
+      <div class="form-group has-feedback">
+        <%= f.text_field :lastname, class: "form-control", placeholder: "Last name" %>
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>      
+      <div class="form-group has-feedback">
+         <%= f.text_field :email, class: "form-control", placeholder: "Email" %>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+         <%= f.password_field :password, class: "form-control", placeholder: "Password" %>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      
+      <div class="form-group has-feedback">
+         <%= f.password_field :password_confirmation, class: "form-control", placeholder: "Confirm Password" %>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+
+      <div class="form-group has-feedback">
+         <%= button_tag "Sign me up!", :class => "btn btn-primary btn-block", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+      </div>
+      
+    <% end %>
+
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+        <%= link_to "/auth/facebook", id: "sign_in", class: "btn btn-block btn-social btn-facebook2" do %>
+          <i class="fa fa-facebook"></i> Register with Facebook
+        <% end %>
+        <%= link_to "/auth/google", class: "btn btn-block btn-social btn-google" do %>
+            <i class="fa fa-google-plus"></i> Register with Google+
+        <% end %>
+				<%= link_to "/auth/linkedin", class: "btn btn-block btn-social btn-linkedin2" do %>
+				    <i class="fa fa-linkedin"></i> Register with LinkedIn
+				<% end %>
+    </div>
+    
+    <!-- /.social-auth-links -->
+    <br>
+    <center>Already have an account? <a href="/account-login">Login</a></center>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+
+
+</body>

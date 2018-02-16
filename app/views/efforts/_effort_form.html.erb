@@ -1,0 +1,76 @@
+<%= form_for(@effort, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+
+<div class="box-body">
+      <div class="col-md-6">
+         <div class="form-group">
+            <label>Client</label>
+            <%= f.collection_select(:client_id, Client.all.order(:name), :id, :name, {prompt: false}, {class: 'form-control'}) %>
+         </div>
+      </div>
+      <div class="col-md-6">
+         <div class="form-group">
+            <label>Assigned User</label>
+            <%= f.collection_select(:user_id, User.all.order(:firstname), :id, :name_and_email, {prompt: false}, {class: 'form-control'}) %>
+         </div>
+      </div>
+      
+      <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :strategy_id, "<i class='fa fa-tasks margin-r-5'> </i> Task Code".html_safe %>
+            <%= f.text_field :strategy_id, class: 'form-control', value: "#{( @task_code.nil? ? nil : @task_code.code)}" %>
+          </div>
+      </div>
+
+      <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :date, "<i class='fa fa-calendar margin-r-5'> </i> Date".html_safe %>
+            <%= f.text_field :date, id: "datepicker", class: 'form-control', value: "#{f.object.date.strftime("%Y-%m-%d") unless f.object.new_record? }" %>
+          </div>
+      </div>
+      
+      <div class="col-md-12">
+          <div class="form-group">
+            <%= f.label :status_url, "<i class='fa fa-info-circle margin-r-5'> </i> Status Url".html_safe %>
+            <%= f.text_field :status_url, class: 'form-control' %>
+          </div>
+      </div>
+
+      <div class="col-md-12">
+          <div class="form-group">
+            <%= f.label :qa, "<i class='fa fa-commenting margin-r-5'> </i> Feedback".html_safe %>
+            <%= f.text_area :qa, class: 'form-control', rows: 4 %>
+          </div>
+      </div>
+      
+      <div class="form-group">
+        <%#= f.label :notes, "<i class='fa fa-file-text-o margin-r-5'> </i> Notes".html_safe %> 
+        <%#= f.text_area :notes, class: 'form-control', rows: '4' %>
+      </div>
+</div>
+  <div class="box-footer">
+      <div class="actions">
+         <%= f.button  @effort.new_record? ? "Create Effort" : "Update Effort", :class => "btn btn-block btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+         <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+      
+      </div>
+  </div>
+<% end %>
+
+
+<script>
+    $(document).ready(
+      
+      /* This is the function that will get executed after the DOM is fully loaded */
+      function () {
+        $( "#datepicker" ).datepicker({
+          changeMonth: true,//this option for allowing user to select month
+          changeYear: true, //this option for allowing user to select from year range
+          format: "yyyy-mm-dd"
+        });
+      }
+    
+    );
+</script>

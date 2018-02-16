@@ -1,0 +1,74 @@
+<% @header_title = "Technical Strategies" %>
+<%# @menu_user = "active" %>
+
+          <div class="box" id="strategy_list">
+            <div id="strategy_list_x">
+            <div class="box-header">
+              <%= link_to new_technical_strategy_path, remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."}, class: "btn btn-primary btn-flat pull-right margin-left" do %>
+                <i class="fa fa-cubes"></i> Add Technical Strategy
+              <% end %>
+              
+              <%#= link_to '/import-strategy-form', remote: true, data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."}, class: "btn btn-success btn-flat pull-right" do %>
+                <!--<i class="fa fa-upload"></i> Upload Excel Sheet-->
+              <%# end %>
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              
+              <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+              <table class="footable table table-stripped table-hover table-bordered" data-page-size="1000" data-limit-navigation="4" data-filter=#filter>
+                 <thead>
+                    <tr>
+                       <th width="50%">Description</th>
+                       <th data-hide="phone,tablet" width="130px">Notes</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                       <% @tech_strategy.each do |tech_strat| %>  
+                       <tr height="57px" id="strategy_<%= tech_strat.id %>" class="user_listing">
+                          <td width="10%">
+                             <%= simple_format(tech_strat.description) %>
+                             <div id="my_box" class="hidden_option">
+                                <%= link_to edit_technical_strategy_path(tech_strat.id), remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}, class: "btn btn-box-tool"  do %>
+                                <i class="fa fa-edit text-blue"></i> 
+                                <% end %>
+                                &nbsp; : &nbsp
+                                <%= link_to tech_strat, method: :delete, data: { confirm: 'Are you sure?' }, title: 'delete' do %>
+                                <i class="fa fa-trash-o text-red"></i>
+                                <% end %>
+                             </div>
+                          </td>
+                          <td ><%= simple_format(tech_strat.notes.humanize) if  tech_strat.notes.present? %></td>
+                       </tr>
+                       <% end %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                       <td colspan="5">
+                          <ul class="pagination pull-right"></ul>
+                       </td>
+                    </tr>
+                  </tfoot>
+                 
+              </table>
+            </div>
+            <!-- /.box-body -->
+            
+
+          </div>
+          </div>
+          
+
+
+
+<script>
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+}
+
+effectLoad();
+
+</script>

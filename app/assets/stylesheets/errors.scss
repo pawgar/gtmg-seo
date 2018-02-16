@@ -1,0 +1,17 @@
+.error_page{
+   text-align: center;
+}
+.error_page .title_500, .error_page .title_404{
+    font-size: 120px;
+    color: #3c8dbc;
+    font-weight: 600;
+}
+.error_page .line_1_500, .error_page .line_1_404{
+    font-size: 35px;
+    font-weight: 500;
+    color: #3c8dbc;
+}
+
+.error_page .line_2_500, .error_page .line_2_404{
+        color: #2f617e;
+}

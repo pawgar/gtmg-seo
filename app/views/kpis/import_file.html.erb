@@ -1,0 +1,121 @@
+<div class="box">
+    <div class="box-header with-border">
+       <h3 class="box-title">KPI File Import </h3>
+    </div>
+    
+    <div class="box-body">
+
+
+         <%= form_tag(import_kpi_file_path, multipart: true) do %>           
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Website</label>
+                            <%= collection_select('upload[client]', 'id', Client.all.order(:name), :id, :name, {prompt: false}, {class: 'form-control', required: true }) %>
+                            <%#= collection_select(:client_id, Client.all.order(:name), id, :name, {prompt: false}, {class: 'form-control'}) %>
+                         </div>
+                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <%= label_tag 'date', "<i class='fa fa-calendar margin-r-5'> </i> Date".html_safe %>
+                            <%= text_field_tag 'upload[date]', nil, class: 'kpi_date form-control' %>
+                          </div>
+                    </div>
+      
+                    
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           <label for="upload[file]" class="control-label">File</label>
+                           <%= file_field_tag 'upload[file]', class:"form-control", required: true, data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..." } %>
+                       </div>
+                   </div>
+                   
+                   <div class="col-md-12">
+                       <%= button_tag "Start Importing", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."}, class: "btn btn-success ajax" %>
+                   </div>
+        <% end %>
+    </div>
+</div>
+
+<% if flash[:skipped_data].present? %>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-danger">
+           <div class="box-header with-border">
+              <h3 class="box-title">Skipped Data</h3>
+              <div class="box-tools pull-right">
+                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                 </button>
+                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+           </div>
+           <!-- /.box-header -->
+           <div class="box-body">
+              <div class="table-responsive">
+                 <div class="col-md-6" style="border-right: 1px solid #f4f4f4">
+                   <i class="fa fa-exclamation-circle text-red"> </i> Data already exists on the selected date!
+                 </div>
+
+                 <div class="col-md-6">
+                   <i class="fa fa-eye-slash text-green" data-toggle='tooltip' title='KPI Objective not found!'> </i> KPI Objective not found!
+                 </div>
+
+                 <table class="table table-striped no-margin">
+                    <thead>
+                       <tr>
+                          <th></th>
+                          <th>Line</th>
+                          <th>Value</th>
+                          <th>Status</th>
+                       </tr>
+
+                    </thead>
+                    <tbody>
+                    <% flash[:skipped_data].each_with_index do |ts, i| %>
+                       <tr>
+                          <td><%= i + 1 %></td>
+                          <th><%= ts[:ts_line] %></a></th>
+                          <!--td><%#= simple_format(ts["value"]) unless ts["value"].nil? || ts.nil? %></td-->
+                          <td><%= ts[:value] unless ts[:value].nil? || ts.nil? %></td>
+                          <td> 
+
+                            <% case ts[:failure] %>
+                            <% when "FC-X000" %>
+                              <i class="fa fa-exclamation-circle text-red" data-toggle='tooltip' title='Data already exists on the selected date!'> </i>
+                            <% when "FC-X001" %>
+                              <i class="fa fa-eye-slash text-green" data-toggle='tooltip' title='KPI Objective not found!'> </i>
+                            <% end %>
+
+                          </td>
+                       </tr>
+                    <% end %>
+                    </tbody>
+                 </table>
+              </div>
+              <!-- /.table-responsive -->
+           </div>
+           <!-- /.box-footer -->
+        </div>
+    </div>
+</div> 
+<% end %>
+
+
+<script>
+    // https://bootstrap-datepicker.readthedocs.io/en/latest/
+    $(document).ready(function(){
+        
+      $('.kpi_date').datepicker({
+          format: "MM yyyy",
+          todayBtn: "linked",
+          startView: "months", 
+          minViewMode: "months"
+      });
+          
+          
+    });
+    
+</script>
+
+

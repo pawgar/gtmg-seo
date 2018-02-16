@@ -1,0 +1,85 @@
+<%#  session[:effort_file_params].clear %>
+
+<%= form_for(@upload_effort, url: { action: 'process_uploaded_effort'}, method: 'POST', html: { :multipart => true, id: "effort_file_import"}) do |f| %>
+    
+
+
+        <%#= session[:effort_file_params] %>
+        <%#= @upload_effort.current_step %>
+<% if @upload_effort.errors.any? %>
+    <div class="box box-widget" style="border-left: 5px solid #dd4b39">
+        <div class="box-body">
+            <ul>
+                <% @upload_effort.errors.full_messages.each do |msg| %>
+                    <i class="fa fa-times-circle-o text-red"> </i> <%= msg %><br/>
+                <% end %>
+            </ul>
+        </div>
+    </div>
+<% end %>  
+
+<div class="box box-primary">
+    
+        <%= render "#{@upload_effort.current_step}_step", f: f  %>
+
+    <div class="box-footer">    
+            <% unless @upload_effort.first_step? %>
+                <%= button_tag(type: 'submit', name: "back_button", id: "step1Prev", class: "btn btn-default prev") do %>
+                <i class="fa fa-chevron-circle-left"> </i> Back
+                <% end %>
+            <% end %>
+            
+            <% if @upload_effort.current_step == 'import_file' %>
+               <%= button_tag(type: 'submit', class: "btn btn-success pull-right") do %>
+                   Next <i class='fa fa-chevron-circle-right'> </i>
+               <% end %>
+            <% else %>
+               <%= f.submit "Start Importing", class: "btn btn-success pull-right ajax" %>
+            <% end %>
+    </div>
+</div>
+
+<% end %>
+
+<% if flash[:skipped_data].present? %>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-danger">
+           <div class="box-header with-border">
+              <h3 class="box-title">Skipped Data</h3>
+              <div class="box-tools pull-right">
+                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                 </button>
+                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+           </div>
+           <!-- /.box-header -->
+           <div class="box-body">
+              <div class="table-responsive">
+                 <table class="table table-striped no-margin">
+                    <thead>
+                       <tr>
+                          <th></th>
+                          <th>Date</th>
+                          <th>Task Code</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                    <% flash[:skipped_data].each_with_index do |tcode, i| %>
+                       <tr>
+                          <td><%= i + 1 %></td>
+                          <td><%= tcode[:date] %></a></td>
+                          <td><%= tcode[:task_code] %></td>
+                       </tr>
+                    <% end %>
+                    </tbody>
+                 </table>
+              </div>
+              <!-- /.table-responsive -->
+           </div>
+           <!-- /.box-footer -->
+        </div>
+    </div>
+</div> 
+<% end %>

@@ -1,0 +1,25 @@
+<%= form_for(@strategy, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+      <div class="form-group">
+         <%= f.label :code, "<i class='fa fa-code margin-r-5'> </i> Code".html_safe %> 
+         <%= f.text_field :code, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :description, "<i class='fa fa-align-justify margin-r-5'> </i> Description".html_safe %>
+        <%= f.text_area :description, class: 'form-control', rows: '4' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :notes, "<i class='fa fa-file-text-o margin-r-5'> </i> Notes".html_safe %> 
+        <%= f.text_area :notes, class: 'form-control', rows: '4' %>
+      </div>
+      
+  <div class="actions">
+     <%= f.button  @strategy.new_record? ? "Create Strategy" : "Update Strategy", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+     <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+  </div>
+<% end %>

@@ -1,0 +1,76 @@
+<div class="box">
+   <div class="box-header with-border">
+   		<h3 class="box-title">Upload Monthly Report</h3>
+   </div>
+
+   <div class="box-body">
+   		 <div class="box-body">
+		   		<% if @report_file.errors.full_messages.any? %>
+		   		<div class="row">
+		   			<div class="col-md-12" style="border-bottom: 1px solid #f4f4f4">    
+					    <div id="error_explanation" class="bg-danger text-danger">
+					        <div class="box-body">
+					            <% @report_file.errors.full_messages.each do |message| %>
+					                <small><i class="fa fa-times-circle-o margin-r-5"> </i><%= message %></small> <br/>
+					            <% end %>
+					        </div>
+					    </div> 
+						<br/>
+					</div>
+				</div>
+				<% end %>
+
+		     	<div class="row">
+
+					<%= form_for @report_file, class: "filter-form" do |f| %>
+					<div class="col-md-3" style="border-right: 1px solid #f4f4f4">
+						<div class="form-group">
+					        <%= f.label :client_id, "<i class='fa fa-link margin-r-5'> </i> Website".html_safe %>
+					        <%#= collection_select(:object, collection, :value_method, :text_method, {}, { :class => 'form-control' }) %>
+					        <%= f.collection_select(:client_id, Client.all.order(:name), :id, :name, {prompt: ''}, { class: 'skip-empty form-control'}) %>
+					    </div>
+					</div>
+
+					<div class="col-md-3" style="border-right: 1px solid #f4f4f4">
+					    <div class="form-group">
+					         <%= f.label :date, "<i class='fa fa-calendar margin-r-5'> </i> Date".html_safe %>
+					         <%= f.text_field :date, id: "date", class: "form-control" %>
+					    </div>
+					</div>
+
+					<div class="col-md-3" style="border-right: 1px solid #f4f4f4">
+						<label>&nbsp;</label>
+					    <%= f.file_field :report_file, class: "form-control", style: "padding-top: 0px" %>
+					</div>
+
+					<div class="col-md-3" style="border-right: 1px solid #f4f4f4">
+					    <%= f.button "Start importing", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Importing file...".html_safe}, class: "btn btn-primary", style: "margin-top: 25px"%>
+					</div>
+
+					<% end %>
+
+				</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	// https://bootstrap-datepicker.readthedocs.io/en/latest/
+    $(document).ready(function(){
+        
+      $('#date').datepicker({
+          format: "MM yyyy",
+        startView: "months", 
+        minViewMode: "months",
+          todayBtn: "linked",
+      });
+
+     });
+</script>
+
+
+
+
+      

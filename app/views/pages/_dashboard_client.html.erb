@@ -1,0 +1,71 @@
+<div class="box box-success">
+   <div class="box-header with-border">
+      <i class="fa fa-globe"></i>
+      <h3 class="box-title">My Site</h3>
+     <div class="box-tools pull-right">
+
+       <%#= link_to new_site_path, remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."} do %>
+            <%#= button type="button" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Register New Site</button> %>
+       <%# end %>   
+                                   
+     </div>
+   </div>
+   <!-- /.box-header -->
+   <div class="box-body">
+    <div id="data-list">
+        <div id="data-list-x">
+              <ul class="todo-list">
+                <% @mySite.clients.each do |c| %>
+                 <li>
+                    <!-- todo text -->
+                    <span class="text">
+                    <% if c.notes.present? %>
+                        <%= link_to show_site_note_path(c.id), remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}, class: "btn btn-box-tool"  do %>
+                            <i class="fa fa-file-text-o"></i>
+                        <% end %>
+                    <% end %>
+                    
+                        <%= c.name %>
+                        <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="text">
+                        <%= link_to "/efforts-report?utf8=✓&client=#{c.id}", title: "Efforts", class: "hover-e1" do %>
+                            <i class="fa fa-tasks fa-fw"></i>
+                        <% end %>&nbsp;&nbsp;&nbsp;
+                        <%= link_to "/keywords-ranking-monitoring?utf8=✓&client=#{c.id}", title: "Keywords Ranking Monitoring", class: "hover-e1"  do %>
+                            <i class="fa fa-line-chart text-green fa-fw"></i>
+                        <% end %>&nbsp;&nbsp;&nbsp;
+                        <%= link_to "/key-performance-index?utf8=✓&client=#{c.id}", title: "Key Performance Index", class: "hover-e1"  do %>
+                            <i class="fa fa-bar-chart text-orange fa-fw"></i>
+                        <% end %>
+                        </span>
+                    </span>
+                    <!-- General tools such as edit or delete-->
+                    <%#= <div class="tools"> %>
+                       <%#= link_to edit_site_path(c.id), remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}, class: "btn btn-box-tool"  do %>
+                            <%#= <i class="fa fa-edit text-blue"></i> %>
+                       <%# end %>
+                       
+                       <%#= link_to destroy_site_path(c.id), method: :delete, data: { confirm: 'Are you sure you want to delete this client? (All users will be unassigned.)' }, title: 'delete' do %>
+                            <%#= <i class="fa fa-trash-o text-red"></i> %>
+                        <%# end %>  
+                    <%#= </div> %>
+                 </li>
+                 
+                <% end %> 
+                
+                <% if @mySite.clients.empty? %>
+                    <div class="callout well well-sm no-shadow">
+                       <p class="text-muted text-center">You don't have any registered site!</p>
+                    </div>
+                <% end %>        
+                 
+              </ul>
+        </div>
+      </div>
+   </div>
+   <!-- /.box-body -->
+      <div class="box-footer clearfix no-border">
+                 
+      </div>
+      
+</div>

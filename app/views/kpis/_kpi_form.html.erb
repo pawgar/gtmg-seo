@@ -1,0 +1,63 @@
+<%= form_for(@kpi, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+ 
+<% if @kpi.errors.full_messages.any? %>    
+    <div id="error_explanation" class="bg-danger text-danger">
+        <div class="box-body">
+            <% @kpi.errors.full_messages.each do |message| %>
+                <small><i class="fa fa-times-circle-o margin-r-5"> </i><%= message %></small> <br/>
+            <% end %>
+        </div>
+    </div> 
+<% end %>
+
+<hr>
+
+    <div class="form-group">
+        <%= f.label :client_id, "<i class='fa fa-user margin-r-5'> </i> Client Site".html_safe %>
+        <%#= collection_select(:object, collection, :value_method, :text_method, {}, { :class => 'form-control' }) %>
+        <%= f.collection_select(:client_id, Client.all.order(:name), :id, :name, {prompt: ''}, {class: 'skip-empty form-control'}) %>
+    </div>
+                     
+      <div class="form-group">
+        <%= f.label :kpi_objective_id, "<i class='fa fa-crosshairs margin-r-5'> </i> Keyword".html_safe %>
+        <%#= f.text_field :title, class: 'form-control' %>
+        <%= f.autocomplete_field :kpi_objective_id, autocomplete_kpi_objective_title_kpi_objectives_path, value: "#{f.object.kpi_objective.title unless f.object.new_record?}", class: 'form-control', required: true %>
+      </div>
+
+      
+      <div class="form-group">
+        <%= f.label :date, "<i class='fa fa-calendar margin-r-5'> </i> Date".html_safe %>
+        <%= f.text_field :date, class: 'date form-control', placeholder: "#{(DateTime.now.to_date).strftime('%B %Y')}", size: 30, 
+        value: "#{f.object.date.strftime("%b %Y") unless f.object.new_record? || f.object.date.nil?}", required: true %>
+      </div>
+      <div class="form-group">
+         <%= f.label :kpi_value, "<i class='fa fa-line-chart margin-r-5'> </i> Value".html_safe %> 
+         <%= f.text_field :kpi_value, class: 'form-control', required: true %>
+      </div>
+      
+  <div class="actions">
+     <%= f.button  @kpi.new_record? ? "Add Record" : "Update Record", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+     <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+  </div>
+  
+<% end %>
+
+<script>
+    // https://bootstrap-datepicker.readthedocs.io/en/latest/
+    $(document).ready(function(){
+        
+      $('.date').datepicker({
+          format: "MM yyyy",
+          todayBtn: "linked",
+          startView: "months", 
+          minViewMode: "months"
+      });
+          
+          
+    });
+    
+</script>

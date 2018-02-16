@@ -1,0 +1,145 @@
+<% if @session_user_info.Administrator? %>
+
+
+    <ul class="sidebar-menu">
+      
+        <li class="header">MAIN NAVIGATION</li>
+        
+        <li class="<%= 'active' if params[:controller] == 'pages' && params[:action] == 'dashboard' %>">
+          <%= link_to "/pages/dashboard" do %>
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <% end %>
+        </li>
+        
+        <li class="<%= 'active' if params[:controller] == 'users' %>">
+          <%= link_to users_path do %>
+            <i class="fa fa-user"></i> <span>Users</span>
+          <% end %>
+        </li>
+        
+        <li class="<%= 'active' if params[:controller] == 'clients' %>">
+          <%= link_to clients_path do %>
+            <i class="fa fa-link"></i> <span>Client's Website</span>
+          <% end %>
+        </li>
+        
+        <li class="<%= 'active' if params[:controller] == 'monthly_reports' %>">
+          <%= link_to monthly_reports_path do %>
+            <i class="fa fa-calendar"></i> <span>Monthly Reports</span>
+          <% end %>
+        </li>
+
+
+        <li class="header">ON-PAGE SEO</li>
+
+        <li class="<%= 'active' if params[:controller] == 'technical_strategies' %>">
+          <%= link_to technical_strategies_path do %>
+            <i class="fa fa-cube"></i> <span>Technical Strategies</span>
+          <% end %>
+        </li>
+
+        <li class="<%= 'active' if params[:controller] == 'tech_strategy_implementations' %>">
+          <%= link_to admin_technical_strategy_implementations_path do %>
+            <i class="fa fa-cubes"></i> <span>Technical Strategy <br>Implementations</span>
+          <% end %>
+        </li>        
+              
+
+        <li class="<%= 'active' if params[:controller] == 'krms' %>">
+          <%= link_to krms_path do %>
+            <i class="fa fa-line-chart"></i> <span>KRM</span>
+          <% end %>
+        </li>   
+
+        <li class="<%= 'active' if params[:controller] == 'kpi_objectives' %>">
+          <%= link_to kpi_objectives_path do %>
+            <i class="fa fa-bullseye"></i> <span>KPI Objectives</span>
+          <% end %>
+        </li>  
+
+        <li class="<%= 'active' if params[:controller] == 'kpis' %>">
+          <%= link_to kpis_path do %>
+            <i class="fa fa-bar-chart"></i> <span>KPI</span>
+          <% end %>
+        </li>  
+
+
+        <li class="header">OFF-PAGE SEO</li>
+
+        <li class="<%= 'active' if params[:controller] == 'offpage_categories' %>">
+          <%= link_to offpage_categories_path do %>
+            <i class="fa fa-puzzle-piece"></i> <span>Categories</span>
+          <% end %>
+        </li>
+
+        <li class="<%= 'active' if params[:controller] == 'strategies' %>">
+          <%= link_to strategies_path do %>
+            <i class="fa fa-puzzle-piece"></i> <span>Strategies</span>
+          <% end %>
+        </li>
+
+        <li class="<%= 'active' if params[:controller] == 'efforts' || params[:controller] == 'qa_comments' %>">
+          <%= link_to efforts_path do %>
+            <i class="fa fa-tasks"></i> <span>Efforts</span>
+          <% end %>
+        </li> 
+
+      </ul>
+      
+<% else %>
+
+    <ul class="sidebar-menu">
+      
+        <li class="header">MAIN NAVIGATION</li>
+        
+        <li class="<%= 'active' if params[:controller] == 'pages' && params[:action] == 'dashboard' %>">
+          <%= link_to "/pages/dashboard" do %>
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <% end %>
+        </li>
+
+        <li class="<%= 'active' if params[:controller] == 'monthly_reports' %>">
+          <%= link_to monthly_report_path do %>
+            <i class="fa fa-calendar"></i> <span>Monthly Reports</span>
+          <% end %>
+        </li>
+
+        <li class="header">ON-PAGE SEO</li>
+        
+        <li class="<%= 'active' if params[:controller] == 'tech_strategy_implementations' %>">
+          <%= link_to technical_strategy_implementations_path do %>
+            <i class="fa fa-cubes"></i> <span>Technical Strategy <br>Implementations</span>
+          <% end %>
+        </li>        
+        
+        <li class="<%= 'active' if params[:controller] == 'krms' %>">
+          <%= link_to keywords_ranking_monitoring_path do %>
+            <i class="fa fa-line-chart"></i> <span>KRM</span>
+          <% end %>
+        </li>  
+        
+        <li class="<%= 'active' if params[:controller] == 'kpis' %>">
+          <%= link_to key_performance_index_path do %>
+            <i class="fa fa-bar-chart"></i> <span>KPI</span>
+          <% end %>
+        </li> 
+
+
+        <li class="header">OFF-PAGE SEO</li>
+        
+        <li class="<%= 'active' if params[:controller] == 'strategies' %>">
+          <%= link_to strategies_path do %>
+            <i class="fa fa-puzzle-piece"></i> <span>Strategies</span>
+          <% end %>
+        </li>
+
+        <li class="<%= 'active' if params[:controller] == 'efforts'  || params[:controller] == 'qa_comments' %>">
+          <%= link_to efforts_report_path do %>
+            <i class="fa fa-tasks"></i> <span>Efforts</span>
+          <% end %>
+        </li> 
+
+        
+      </ul>
+
+<% end %>

@@ -1,0 +1,3 @@
+<% @title = "#{@pdf_file.client.name} - #{@pdf_file.date.to_date.strftime('%B %Y') if @pdf_file.date.present?} Monthly Report " %>
+
+<iframe src="<%= @pdf_file.report_file.url(:original) %>" width="100%" style="border: 0; height:100vh"></iframe>

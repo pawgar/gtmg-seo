@@ -1,0 +1,178 @@
+<% @header_title = @fSiteInfo_name %>
+
+<%
+if params[:start_date] || params[:end_date]
+  kpi_collect = @kpis.collect{|v| v[1].map{|b| b.date}}.join(',').split(',').uniq.sort
+else
+  kpi_collect = @kpis.collect{|v| v[1].map{|b| b.date}}.join(',').split(',').uniq.sort#.last(3)
+end
+%>
+
+<%# @menu_user = "active" %>
+
+<div class="box">
+   <div class="box-header">
+
+      <div class="row"> 
+         <%= form_tag key_performance_index_path, id: "client-site", class: "filter-form", method: 'get' do %>
+         <div class="col-sm-3" style="border-right: 1px solid #f4f4f4">
+            <div class="form-group">
+               <label for="" class="control-label">Client Site</label>
+                     <%#= collection_select(:client_id, 0, Client.all, :name, :name, {}, { :class => 'form-control' }) %>
+                     <select name="client" class="skip-empty form-control">
+                        <% @mySite.clients.order(:name).each do |x| %>
+                        <option value="<%= x.id %>" <%= "selected" if x.id == @fSiteInfo_id %>> <%= x.name %></option>
+                        <% end %>
+                     </select>
+            </div>
+         </div>
+         <div class="col-sm-2" style="border-right: 1px solid #f4f4f4">
+            <div class="form-group">
+               <label for="">Start Date</label>
+               <input type="text" id="start_date" class="skip-empty form-control" size="30" name="start_date" value="<%= @start_date %>"/>
+            </div>
+         </div>
+         <div class="col-sm-2" style="">
+            <div class="form-group">
+                  <label for="">End Date</label>
+                  <input type="text" id="end_date" class="skip-empty form-control" size="30" name="end_date" value="<%= @end_date %>"/>
+            </div>
+         </div>
+
+         <div class="col-sm-1" style="">
+            <div class="form-group">
+                  <label for=""> &nbsp;</label>
+                  <button type="submit" class="no-margin form-control btn btn-primary"><i class="fa fa-search"> </i></button>
+            </div>
+         </div>
+         
+         <% end %>
+
+         <div class="col-xs-12 col-sm-3 pull-right" style="border-right: 1px solid #f4f4f4">
+            
+                   <div class="row">
+                      <div class="form-group">
+                        <div class="col-md-10">
+                        </div>
+                        <div class="col-md-2">
+                           <div class="btn-group pull-right">
+                              <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                              <i class="fa fa-bars fa-lg text-blue "></i></button>
+                              <ul class="dropdown-menu" role="menu">
+                                 <li>
+                                    <%= link_to key_performance_index_path(client: params[:client], start_date: params[:start_date], end_date: params[:end_date], :format => :pdf), data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."}  do %>
+                                        <i class="fa fa-file-pdf-o text-orange"> </i> Download as Pdf
+                                    <% end %>
+                                 </li>
+                              </ul>
+                           </div>
+                           
+                        </div>
+                     </div>
+                  </div>
+         </div>
+
+         
+      </div>
+   </div>
+   <!-- /.box-header -->
+   
+    <div id="data-list">
+          <div id="data-list-x">
+             <div class="box-body" id="content3" >   
+                <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="scrolling outer">
+                      <div class="inner">
+                        <table class="table footable table-striped table-hover table-bordered" id="to_pdf" data-page-size="" data-limit-navigation="" data-filter=#filter>
+                          <thead>
+                          <tr>
+                            <th class="">
+                           Keywords
+                          </th>
+                                  <% kpi_collect.each do |month| %>
+                                      <th data-hide="" > 
+                                        <%#= month[0].first.strftime('%b %Y') %> 
+                                        <%= month.to_date.strftime('%b %Y') %>
+                                      </th>
+                                  <% end %>
+                          </tr>
+                          </thead>
+
+                          <tbody>
+                                <% @kpis.sort_by{|k| k[0].downcase}.each do |kpi| %>
+                                <tr height="">
+                                   
+                                   <td class="fixed">
+                                    <%= kpi[0] %>
+                                      <%#= check_record( simple_format(krm) ) %>
+                                   </td>
+
+                                  <% kpi_collect.each do |month| %>
+                                   <% data = kpi[1].select { |m| m.date == month }.first %>
+                                      <td class="box-tools" >
+
+                                      <% if data.present? %>
+                                            <span data-toggle='tooltip' title='<%= data.date.strftime('%b %Y') %>'>
+                                              <%= data.kpi_value %> 
+                                            </span>
+                                      <% end %>
+
+                                      </td>
+                                   <% end %>
+
+                                    </tr>
+                                  <% end %>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                                      <ul class="pagination pull-right">
+                                         <%= paginate @kpis %>
+                                         <%#= page_entries_info @krms %>
+                                      </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>   
+   <!-- /.box-body -->
+</div>
+
+
+
+<script>
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable({ paginate:false });
+        });
+}
+
+effectLoad();
+
+
+// https://bootstrap-datepicker.readthedocs.io/en/latest/
+    $(document).ready(function(){
+        
+      $('#start_date, #end_date').datepicker({
+          format: "M yyyy",
+        startView: "months", 
+        minViewMode: "months",
+          todayBtn: "linked",
+      });
+      
+//----------------------------------------------
+    $("form.filter-form").submit(function(){
+       
+       // Change 'form' to class or ID of your specific form
+        $(this).find(".skip-empty").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+        
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "form.filter-form" ).find( ".skip-empty" ).prop( "disabled", false );          
+          
+    });
+    
+</script>

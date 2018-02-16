@@ -1,0 +1,156 @@
+<% @header_title = "Technical Strategy" %>
+
+<%
+   if params[:client]
+      client = params[:client].to_i
+   else
+      client = @mySite.clients.first.id
+   end
+%>
+<%# @menu_user = "active" %>
+<div class="row">
+    <div class="col-md-12">
+    <div class="box solid">
+       <div class="box-header with-border">
+    
+          <div class="row">
+             <%= form_tag technical_strategy_implementations_path, id: "client-site", class: "filter-form", method: 'get' do %>
+             <div class="col-sm-3" style="border-right: 1px solid #f4f4f4">
+                <div class="form-group">
+                   <label for="" class="control-label">Select Site</label>
+                         <%#= collection_select(:client_id, 0, Client.all, :name, :name, {}, { :class => 'form-control' }) %>
+                         <select name="client" class="skip-empty form-control">
+                            <% @mySite.clients.order(:name).each do |x| %>
+                            <option value="<%= x.id %>" <%= "selected" if client == x.id %>> <%= x.name %></option>
+                            <% end %>
+                            
+                         </select>
+                </div>
+             </div>
+             <div class="col-sm-2" style="border-right: 1px solid #f4f4f4">
+                <div class="form-group">
+                   <label for="">Start Date</label>
+                   <input type="text" id="start_date" class="skip-empty form-control" size="30" name="start_date" value="<%= @start_date %>"/>
+                </div>
+             </div>
+             <div class="col-sm-2" style="">
+                <div class="form-group">
+                      <label for="">End Date</label>
+                      <input type="text" id="end_date" class="skip-empty form-control" size="30" name="end_date" value="<%= @end_date %>"/>
+                </div>
+             </div>
+    
+             <div class="col-sm-1" style="">
+                <div class="form-group">
+                      <label for=""> &nbsp;</label>
+                      <button type="submit" class="no-margin form-control btn btn-primary"><i class="fa fa-search"> </i></button>
+                </div>
+             </div>
+
+
+            <div class="col-xs-12 col-sm-3 pull-right" style="border-right: 1px solid #f4f4f4">
+              <div class="row">
+                <div class="form-group">
+                  <div class="col-md-10"></div>
+                  <div class="col-md-2">
+                    <div class="btn-group pull-right">
+                      <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-bars fa-lg text-blue "></i>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>
+                          <%= link_to technical_strategy_implementations_path(client: params[:client], start_date: params[:start_date], end_date: params[:end_date], :format=>:pdf), data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."} do %> <i class="fa fa-file-pdf-o text-orange"> </i> Download as Pdf
+                            <% end %>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+             
+             <% end %>
+          </div>
+       </div>
+       <!-- /.box-header -->
+       
+       <div id="data-list">
+          <div id="data-list-x">
+             <div class="box-body"> 
+             <div class="box-body table-responsive">
+
+              <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+        
+                  <table class="footable table table-stripped table-hover is-breakable" data-page-size="10000" data-limit-navigation="4" data-filter=#filter>
+                     <thead>
+                        <tr>
+                           <th width="120px">Description</th>
+                           <th width="150px" data-hide="phone,tablet" >Date</th>
+                           <th width="130px" data-hide="phone,tablet">Status</th>
+                           <th width="130px" data-hide="phone,tablet">Comments</th>
+                        </tr>
+                     </thead>
+         
+                   <tbody>
+                      <% @tech_strat.each do |imp| %>
+                      <tr class="box-tools" height="70px">
+                         
+                         <td><%= simple_format(check_record(imp.technical_strategy.description)) %></td>
+                         <td><%= check_record( imp.created_at ).strftime('%Y-%m-%d') if imp.created_at %></td>
+                         <td><%= imp.status %></td>
+                         <td><%= imp.comments %></td>
+                      </tr> 
+                      <% end %>
+                   </tbody>
+                 <tfoot>
+                    <tr>
+                       <td colspan="5">
+                          <ul class="pagination pull-right"></ul>
+                       </td>
+                    </tr>
+                 </tfoot>   
+                 
+                </table>
+       
+             </div>
+          </div>
+       </div>
+       <!-- /.box-body -->
+    </div>
+    </div>
+</div>
+<script>
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+}
+
+effectLoad();
+
+
+
+
+// https://bootstrap-datepicker.readthedocs.io/en/latest/
+    $(document).ready(function(){
+        
+      $('#start_date, #end_date').datepicker({
+          format: "yyyy-mm-dd",
+          todayBtn: "linked",
+      });
+      
+//----------------------------------------------
+    $("form.filter-form").submit(function(){
+       
+       // Change 'form' to class or ID of your specific form
+      	$(this).find(".skip-empty").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+      	return true; // ensure form still submits
+    });
+      	
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "form.filter-form" ).find( ".skip-empty" ).prop( "disabled", false );          
+          
+    });
+
+        
+</script>

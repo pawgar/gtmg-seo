@@ -1,0 +1,9 @@
+<b><%= @info.user.fullname %></b> posted a comment about this task: <strong> <em> <%= @info.effort.strategy.description.titleize %> </em> </strong>
+
+<br/><br/>
+
+<p>
+    <%= @info.comment %>
+</p>
+
+<%= link_to "View This on GTMG SEO Tools", effort_qa_comments_url(effort_id: @info.effort_id) + "#comment_#{@info.id}" %>

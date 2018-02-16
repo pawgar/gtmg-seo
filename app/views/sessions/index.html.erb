@@ -1,0 +1,80 @@
+<body class="hold-transition login-page">
+<div class="register-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>GTMG</b>SEO</a>
+  </div>
+  
+  <% if alert %>
+  <div class="box box-solid">
+    <div class="login_error">
+         <%= alert.html_safe %>
+    </div>
+  </div>
+  <% elsif notice %>
+  <div class="box box-solid">
+    <div class="login_notice">
+         <%= notice.html_safe %>
+    </div>
+  </div>
+  <% end %>
+
+
+
+  <!-- /.login-logo -->
+  <div class="register-box-body">
+      <div class="box-header no-padding">
+          <h3 class="login-box-msg pull-left no-padding">Sign in</h3><i class="fa fa-key fa-flip-horizontal pull-right"></i><br/><br/>
+          <span class="login-box-msg pull-left no-padding">Enter email and password to start your session</span><br/><br/>
+      </div>
+
+    <%= form_tag({controller: "sessions", action: "user_login"}) do %>
+        
+      <div class="form-group has-feedback">
+         <%= text_field_tag :email, params[:email], class: "form-control", placeholder: "Email" %>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+         <%= password_field_tag :password, params[:password], class: "form-control", placeholder: "Password" %>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-7">
+          <div class="form-group has-feedback">
+            <label>
+              <input type="checkbox"> Remember Me
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-5">
+          <%= button_tag "Login", :class => "btn btn-primary btn-block", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+        </div>
+        <!-- /.col -->
+      </div>
+    <% end %>
+
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+        <%= link_to "/auth/facebook", id: "sign_in", class: "btn btn-block btn-social btn-facebook2" do %>
+          <i class="fa fa-facebook"></i> Login with Facebook
+        <% end %>
+        <%= link_to "/auth/google", class: "btn btn-block btn-social btn-google" do %>
+            <i class="fa fa-google-plus"></i> Login with Google+
+        <% end %>
+				<%= link_to "/auth/linkedin", class: "btn btn-block btn-social btn-linkedin2" do %>
+				    <i class="fa fa-linkedin"></i> Login with LinkedIn
+				<% end %>
+    		<br>
+        <a href="/reset-password">I forgot my password</a><br>
+        <a href="/register" class="text-center">Register a new membership</a>
+    </div>
+    <!-- /.social-auth-links -->
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+
+
+</body>

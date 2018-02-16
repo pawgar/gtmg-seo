@@ -1,0 +1,19 @@
+<%= form_for(@user, remote: false, authenticity_token: true, multipart: true, url: {controller: "users", action: "update_avatar"}, :html => { :role => "form"}) do |f| %>
+<div id="error_explanation" class="bg-danger text-danger">
+</div>
+
+<div class="row">
+ <div class="col-sm-12">
+
+  <div class="form-group text-center">
+      <center> <%= f.file_field(:avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg', required: true)%> </center>
+  </div>
+
+  <hr>
+  <div class="form-group text-center">
+    <%#= f.submit  @user.new_record? ? "Create Create" : "Update Customer", :class => "btn btn-primary" %>
+    <%= f.button "Upload Photo", :class => "btn btn-danger", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  </div>
+</div>
+</div>
+<% end %>

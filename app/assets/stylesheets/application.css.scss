@@ -1,0 +1,262 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require bootstrap
+ *= require pace/pace.min
+ *= require pace/pace-theme-loading-bar-multi-color
+ *= require_tree .
+ *= require_self
+ 
+ */
+
+
+// ---------------- custom pace
+
+.pace .pace-activity {
+    border-top-color: #96d363!important;
+    border-left-color: #00a65a!important;
+}
+
+
+body > :not(.pace),body:before,body:after {
+  -webkit-transition:opacity .2s ease-in-out;
+  -moz-transition:opacity .2s ease-in-out;
+  -o-transition:opacity .2s ease-in-out;
+  -ms-transition:opacity .2s ease-in-out;
+  transition:opacity .2s ease-in-out;
+}
+
+body:not(.pace-done) > :not(.pace),body:not(.pace-done):before,body:not(.pace-done):after {
+  opacity: 0.9;
+}
+
+// --------------------- from scaffold *with error
+
+.field_with_errors{
+  
+  input, textarea, select{
+    border: 1px solid red;
+  }
+  
+  label {
+    //color: #ff7678!important;
+  }
+}
+
+
+// ---------------------
+.hidden_option{
+    display: none;
+}
+
+.user_listing:hover .hidden_option{
+    display: block;
+}
+
+
+.hidden_option-inline{
+    display: none;
+}
+
+#indi_wrapper:hover .hidden_option-inline{
+    display: inline-block;
+}
+
+.login_error{
+    border-radius: 0px;
+    border-left: 5px solid #dc3232;
+    border-right: 2px solid white;
+    margin: 0 0 20px 0;
+    padding: 15px 30px 15px 15px;
+}
+
+.login_notice{
+    border-radius: 0px;
+    border-left: 5px solid #3c8dbc;
+    border-right: 2px solid white;
+    margin: 0 0 20px 0;
+    padding: 15px 30px 15px 15px; 
+}
+
+.profile-image .overly-edit{ position:relative; top:0px; width:99px; height:99px; 
+    background: asset_url('img/edit2.png')no-repeat center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover; 
+    -o-background-size: cover;
+    border-radius: 70%;
+      /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  /* IE 5-7 */
+  filter: alpha(opacity=0);
+  /* Netscape */
+  -moz-opacity: 0;
+  /* Safari 1.x */
+  -khtml-opacity: 0;
+  /* Good browsers */
+  opacity: 0;
+}
+.profile-image:hover .overly-edit { 
+      /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.5)";
+  /* IE 5-7 */
+  filter: alpha(opacity=0.5);
+  /* Netscape */
+  -moz-opacity: 0.5;
+  /* Safari 1.x */
+  -khtml-opacity: 0.5;
+  /* Good browsers */
+  opacity: 0.5;
+}
+
+.loader-image-popup{
+    background: url(https://s3.amazonaws.com/gtmgseo/other-image/loader-image.gif)no-repeat center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover; 
+    -o-background-size: cover;
+    border-radius: 50%;
+    border: 2px solid #e4e4e4;
+}
+
+.modal-header{
+    background-color: #efefef;
+}
+
+.dataTables_paginate .paginate_button{
+    padding: 0px!important;
+}
+
+.tools-hidden{
+    display: none;
+}
+.box-tools:hover .tools-hidden{
+    display: block;
+}
+
+.hover-e1:hover{
+      /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.8)";
+  /* IE 5-7 */
+  filter: alpha(opacity=0.8);
+  /* Netscape */
+  -moz-opacity: 0.8;
+  /* Safari 1.x */
+  -khtml-opacity: 0.8;
+  /* Good browsers */
+  opacity: 0.8;  
+}
+
+.is-breakable td{
+  /* For Chrome and IE */
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */ 
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  white-space: pre-wrap;       /* css-3 */
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  white-space: normal;
+  -moz-hyphens:auto;
+  -ms-hyphens:auto;
+  -webkit-hyphens:auto;
+  hyphens:auto;
+
+  /* For Firefox */
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+
+.ui-autocomplete{
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    z-index: 99999!important;
+    /* For Firefox */
+    word-break: break-all;
+    word-break: break-word;
+    padding: 0;
+    li{
+        list-style: none;
+        padding: 5px 15px;
+    }
+    li:hover{
+        background-color: #3c8dbc;
+        cursor: pointer;
+        color: white;
+    }
+}
+
+
+/* scrolling table for kpi and krm */
+
+.scrolling table {
+    table-layout: inherit;
+ *margin-left: -100px;/*ie7*/
+}
+.scrolling td, th.fixed {
+    vertical-align: top;
+  padding: 10px;
+  min-width: 150px;
+}
+.scrolling td.fixed, th.fixed{
+  /* position: absolute; */
+ /* *position: relative; /*ie7*/ 
+  left: 0;
+  min-width: 250px!important;
+}
+
+.outer {
+  position: relative
+}
+.inner {
+  overflow-x: auto;
+  overflow-y: visible;
+  /*margin-left: 250px; */
+}
+
+td.box-tools{
+  position: relative;
+}
+.scrolling .tools-hidden{
+  position: absolute;
+  top: 0px!important;
+  right: 0px;
+  background: #ededed;
+  border-radius: 3px;
+}
+
+
+.text-white{
+  color: white;
+}
+
+
+.ga_charts h3{
+    line-height: 10px;
+}
+
+.ga_charts span{
+    line-height: 0px;
+}
+
+.ga_charts li span{
+    display: none!important;
+}
+
+.ga_charts li.active span{
+    display: block!important;
+}
+
+.margin-5{
+  margin: 5px 0 5px 0;
+}

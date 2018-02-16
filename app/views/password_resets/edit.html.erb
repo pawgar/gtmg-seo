@@ -1,0 +1,57 @@
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>GTMG</b>SEO</a>
+  </div>
+
+<% if @user.errors.any? %>  
+  <div class="box box-solid">
+    <div class="login_error">
+        <% @user.errors.full_messages.each do |message| %>
+         <ul><small><%= message.html_safe %></small></ul>
+        <% end %>
+    </div>
+  </div>
+<% elsif alert %>
+  <div class="box box-solid">
+    <div class="login_error">
+         <%= alert.html_safe %>
+    </div>
+</div>
+<% end %>
+  
+
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+
+        <div class="text-center">
+           <h2 class="box-title">New Password </h2>
+           <p>
+              Enter new password to reset old one.
+           </p>
+           
+			<%= form_for(@user, url: password_reset_path(params[:id])) do |f| %>
+			<div class="form-group">
+			  <%= hidden_field_tag :email, @user.email %>
+			  <%= f.label :password %>
+      		  <%= f.password_field :password, class: 'form-control' %>
+			</div>
+
+			<div class="form-group">
+      		  <%= f.label :password_confirmation, "Confirmation" %>
+      		  <%= f.password_field :password_confirmation, class: 'form-control' %>
+			</div>
+
+			<div class="form-group">
+			  <%= button_tag "Update password", :class => "btn btn-block btn-success btn-flat", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+			</div>
+			<% end %>
+        </div>
+
+
+    
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+

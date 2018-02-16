@@ -1,0 +1,189 @@
+<section class="content">
+   <div class="row">
+      <div class="col-md-4">
+         <!-- /.box -->
+         <!-- About Me Box -->
+
+         
+         <div class="box box-primary box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+           
+            <div class="widget-user-header bg-aqua-active">
+                <div class="row">
+                      <div class="col-sm-4">
+                      <div class="widget-user-image">
+                        <% if @user.avatar.present? 
+                                user_avatar = @user.avatar.url(:thumb)
+                            else
+                                user_avatar = "img/no-image.jpg"
+                            end 
+                        %>
+                        
+                       <% if @session_user_info.id == @user.id || @session_user_info.Administrator? %>   
+                         <%= link_to change_avatar_user_path(@user), remote: true, 
+                         data: {disable_with: "<span class='pull-left loader-image-popup' style='width:100px;height:100px'>" } do %>
+                         
+                             <div class="profile-image" style="width: 100px; height: 100px; 
+                             background: #374850 url(<%= asset_path user_avatar %>)no-repeat center center;
+                             background-size: cover;
+    	       			    -webkit-background-size: cover;
+    	          		    -moz-background-size: cover; 
+    	        		    -o-background-size: cover;
+                             border-radius: 50%;
+                             border: 2px solid #e4e4e4;
+                             ">
+                            <div class="overly-edit"></div>
+                             </div> 
+                         <% end %>
+                       <% else %>
+                             <div class="" style="width: 100px; height: 100px; 
+                             background: #374850 url(<%= asset_path user_avatar %>)no-repeat center center;
+                             background-size: cover;
+    	       			    -webkit-background-size: cover;
+    	          		    -moz-background-size: cover; 
+    	        		    -o-background-size: cover;
+                             border-radius: 50%;
+                             border: 2px solid #e4e4e4;
+                             ">
+                            <div class="overly-edit"></div>
+                             </div>                        
+                       <% end %>
+                      </div>
+                      </div>
+                      <!-- /.widget-user-image -->
+                      <div class="col-sm-6">
+                          <h3 class=""><%= (@user.firstname + " " + @user.lastname).titleize %></h3>
+                          <h5 class=""><%= @user.email %></h5>
+                      </div>
+                </div>
+            </div>
+            <% if @user.Client? %>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Registered Site <span class="pull-right badge bg-blue"><%= @user.client_users.count %></span></a></li>
+                  </ul>
+                </div>
+                
+                <div class="box-header with-border">
+                </div>
+            <% end %>
+            <!-- /.box-header -->
+            <div class="box-body">
+               
+               
+                <!-- 
+                <%#= link_to add_notes_client_path, remote: true, data: {disable_with: "<span class='pull-right'><i class='fa fa-refresh fa-spin'></i> Please wait...</span>"} do %>
+                   <i class="fa fa-edit pull-right text-blue"></i>
+                <%# end %>
+               <div class="note-section-wrapper">
+                   <span id="note-section">
+                          <%#= @user.client.notes.humanize unless @user.client.notes.nil? %>
+                          <%# if @user.client.notes.nil? || @user.client.notes.blank? %>
+                              <%#= 'Note is empty' %> <%#= link_to ' add note now!', add_notes_client_path, remote: true %> 
+                          <%# end %>
+                  </span>
+               </div>
+               -->
+               
+            </div>
+            <!-- /.box-body -->
+         </div>
+         <!-- /.box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-8">
+         <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+               <li class="active">
+                   <a href="#settings" data-toggle="tab">
+                   <% if @session_user_info.id == @user.id || @session_user_info.Administrator? %>
+                       Settings
+                   <% else %>
+                       User Info
+                   <% end %>
+                   </a></li>
+            </ul>
+            <div class="tab-content">
+              
+               <div class="active tab-pane" id="settings">
+                  <%= form_for @user, url: {controller: "users", action: "update"}, html: {class: "form-horizontal"} do |info| %>
+                  
+                <% if @user.errors.any? %>
+                  <div class="box box-solid">
+                    <div class="login_error">
+                      <h5>
+                        <%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:
+                          </h5>
+                        <ul>
+                          <% @user.errors.full_messages.each do |message| %>
+                            <i class="fa fa-times-circle-o text-red"> </i> 
+                              <small> <%= message %></small>
+                          <% end %>
+                        </ul>
+                    </div>
+                   </div>
+                <% end %>
+
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                            <%= info.label :firstname, "Firstname", class: "col-sm-2 control-label" %>
+                        <div class="col-sm-10">
+                            <%= info.text_field :firstname, class: "form-control", disabled: !(@session_user_info.id == @user.id || @session_user_info.Administrator?)  %>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <%= info.label :lastname, "Lastname", class: "col-sm-2 control-label" %>
+                        <div class="col-sm-10">
+                           <%= info.text_field :lastname, class: "form-control", disabled: !(@session_user_info.id == @user.id || @session_user_info.Administrator?) %>
+                        </div>
+                     </div>                     
+                     <div class="form-group">
+                        <%= info.label :email, "Email", class: "col-sm-2 control-label" %>
+                        <div class="col-sm-10">
+                           <%= info.email_field :email, class: "form-control", disabled: !(@session_user_info.id == @user.id || @session_user_info.Administrator?) %>
+                        </div>
+                     </div>
+                    
+                    <% if @session_user_info.Administrator? %>
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Role</label>
+                          <div class="col-sm-10">
+                       		<%= info.select(:role, options_for_select(User.roles.map {|k, v| [k.humanize.capitalize, k]},
+                       		selected: @user.role), {}, {:class => 'form-control'}) %>
+    
+                          </div>
+                        </div>
+     
+                         <div class="form-group">
+                          <label class="col-sm-2 control-label">Status</label>
+                          <div class="col-sm-10">
+                              
+                       		<%= info.select :status, options_for_select(User.statuses.map {|k, v| [k.humanize.capitalize, k]},
+                       		selected: @user.status), {}, {:class => 'form-control'} %>
+                          </div>
+                        </div>
+                    <% end %>
+                    
+                    <% if @session_user_info.id == @user.id || @session_user_info.Administrator? %>
+                     <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                           <%= info.button "Update", :class => "btn btn-danger", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+                        </div>
+                     </div>
+                    <% end %>
+                     
+                  <% end %>
+               </div>
+               <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+         </div>
+         <!-- /.nav-tabs-custom -->
+      </div>
+      <!-- /.col -->
+   </div>
+   <!-- /.row -->
+</section>
+<!-- /.content -->
+

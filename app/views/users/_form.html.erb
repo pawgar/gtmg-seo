@@ -1,0 +1,55 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div class="box box-solid">
+      <div class="login_error">
+        <h5><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h5>
+  
+        <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><small><%= message %></small></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  
+      <div class="form-group">
+         <%= f.label :firstname %> 
+         <%= f.text_field :firstname, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :lastname %> 
+        <%= f.text_field :lastname, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email %> 
+        <%= f.text_field :email, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :password %> 
+        <%= f.password_field :password, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation %> 
+        <%= f.password_field :password_confirmation, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :role %> 
+        <%= f.select :role, [["Administrator", "Administrator"], ["Client", "Client"]], {}, {class: "form-control"} %>
+      </div>
+      
+     
+      
+      
+      
+  <div class="actions">
+
+     <%= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+  </div>
+<% end %>

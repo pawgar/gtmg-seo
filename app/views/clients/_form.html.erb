@@ -1,0 +1,43 @@
+<%= form_for(@client, remote: @is_remote) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">   <!-- for remote action only -->
+</div> 
+ 
+<% if @client.errors.full_messages.any? %>    
+    <div id="error_explanation" class="bg-danger text-danger">
+        <div class="box-body">
+            <% @client.errors.full_messages.each do |message| %>
+                <small><i class="fa fa-times-circle-o margin-r-5"> </i><%= message %></small> <br/>
+            <% end %>
+        </div>
+    </div> 
+<% end %>
+
+    <div class="form-group">
+        <%= f.label :name, "<i class='fa fa-link margin-r-5'> </i> Website URL<span class='text-red'>*</span>".html_safe %>
+        <%= f.text_field :name, class: 'form-control' %>
+    </div>
+    
+    <div class="form-group">
+        <%= f.label :code, "<i class='fa fa-barcode margin-r-5'> </i> Code".html_safe %> 
+        <%= f.text_field :code, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+        <%= f.label :ga_profile_id, "<i class='fa fa-bar-chart-o margin-r-5'> </i> Analytics View ID".html_safe %> 
+        <%= f.text_field :ga_profile_id, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+        <%= f.label :notes, "<i class='fa fa-file-text-o margin-r-5'> </i> Notes".html_safe %> 
+        <%= f.text_area :notes, class: 'form-control', rows: '4' %>
+    </div>
+    
+    
+      
+  <div class="actions">
+     <%= f.button  @client.new_record? ? "Create Client" : "Update Client", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+    
+  
+  </div>
+<% end %>

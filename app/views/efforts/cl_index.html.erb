@@ -1,0 +1,246 @@
+<% @header_title = "Efforts Report" %>
+<%# @menu_user = "active" %>
+
+<%
+   if params[:client]
+      client = params[:client].to_i
+   else
+      client = @mySite.clients.first.id
+   end
+%>
+
+<div class="box">
+   
+   <div class="box-header with-border">
+
+      <div class="row">
+         <%= form_tag efforts_report_path, id: "client-site", class: "filter-form", method: 'get' do %>
+         
+         <div class="col-sm-3" style="border-right: 1px solid #f4f4f4">
+            <div class="form-group">
+               <label for="" class="control-label">Client Site</label>
+                     <%#= collection_select(:client_id, 0, Client.all, :name, :name, {}, { :class => 'form-control' }) %>
+                     <select name="client" class="skip-empty form-control">
+                        <% @mySite.clients.order(:name).each do |x| %>
+                        <option value="<%= x.id %>" <%= "selected" if client == x.id %>> <%= x.name %></option>
+                        <% end %>
+                     </select>
+            </div>
+         </div>
+         <div class="col-sm-2" style="border-right: 1px solid #f4f4f4">
+            <div class="form-group">
+               <label for="">Start Date</label>
+               <input type="text" id="start_date" class="skip-empty form-control" size="30" name="start_date" value="<%= @start_date %>"/>
+            </div>
+         </div>
+         <div class="col-sm-2" style="">
+            <div class="form-group">
+                  <label for="">End Date</label>
+                  <input type="text" id="end_date" class="skip-empty form-control" size="30" name="end_date" value="<%= @end_date %>"/>
+            </div>
+         </div>
+
+         <div class="col-sm-1" style="">
+            <div class="form-group">
+                  <label for=""> &nbsp;</label>
+                  <button type="submit" class="no-margin form-control btn btn-primary"><i class="fa fa-search"> </i></button>
+            </div>
+         </div>
+         
+         <% end %>
+         
+
+            <div class="col-xs-12 col-sm-3 pull-right" style="border-right: 1px solid #f4f4f4">
+              <div class="row">
+                <div class="form-group">
+                  <div class="col-md-10"></div>
+                  <div class="col-md-2">
+                    <div class="btn-group pull-right">
+                      <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-bars fa-lg text-blue "></i>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>
+
+                          <% if (@effCount > 260) %>
+                              <a data-toggle='tooltip' title="Can't generate pdf, please limit your query(max row should not exceed 260)!">
+                                <i class="fa fa-file-pdf-o text-orange"> </i> Download as Pdf
+                              </a>
+                          <% elsif (@effCount <= 0) %>
+                              <a data-toggle='tooltip' title="Can't generate pdf, no data found in your query!">
+                                <i class="fa fa-file-pdf-o text-orange"> </i> Download as Pdf
+                              </a>
+                          <% else %>
+                           <%= link_to efforts_report_path(client: params[:client], start_date: params[:start_date], end_date: params[:end_date], :format=>:pdf), data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait...", toggle: 'tooltip'}, title: "Total rows: #{@effCount}" do %> <i class="fa fa-file-pdf-o text-orange"> </i> Download as Pdf
+                           <% end %>
+                          <% end %>
+
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+         <!--div class="col-xs-12 col-sm-3 pull-right" style="border-right: 1px solid #f4f4f4">
+            <%#= form_for @upload, :url => uploads_path do |f| %>
+                   <div class="row">
+                      <div class="form-group">
+                        <div class="col-md-12">
+                           <label class="">&nbsp;</label>
+                        </div>
+                        <div class="col-md-6"> 
+                           <%#= f.file_field :effort_file, :class => "form-control" %>              
+                        </div>
+                        <div class="col-md-3 no-margin">
+                           <%#= f.submit "Import File", :class => "no-margin btn btn-primary" %>	  	               
+                        </div>
+                     </div>
+                  </div>
+            <%# end %>
+         </div-->
+      </div>
+   </div>
+   <!-- /.box-header -->
+
+  
+<div id="data-list">
+   <div id="data-list-x">
+      
+   <div class="box-body table-responsive">
+
+
+<!--input type="text" class="form-control input-sm m-b-xs" id="filter"
+   placeholder="Search in table"-->
+
+      <table class="footable table table-stripped table-hover table-bordered is-breakable" data-page-size="" data-limit-navigation="" data-filter=#filter>
+         <thead>
+            <tr>
+               <th width="120px">Date</th>
+               <th width="250px">Task</th>
+               <th width="150px">Category</th>
+               <th data-hide="phone,tablet" width="130px">Assigned User</th>
+               <th width="150px" data-hide="phone,tablet">Notes</th>
+               <th data-hide="phone,tablet" width="250px">Status Url</th>
+               <th data-hide="phone,tablet" width="350px">QA Feedback</th>
+            </tr>
+         </thead>
+
+      <%# table id="effortTable1" class="table table-bordered table-hover table-striped" %>
+
+         <tbody>
+            <% @effort.includes(:user, :strategy).each do |effort| %>
+            <tr>
+               <td>
+                  <%= effort.date.strftime('%Y-%m-%d') if effort.date.present? %>
+               </td>
+               <td>
+                  <% if effort.strategy  %>
+                     <b><%= effort.strategy.code %></b>: 
+                     <%= effort.strategy.description.humanize %>
+                  <% end %>
+
+               </td>
+
+               <td>
+                  <% if effort.strategy %>
+                    <% effort.strategy.offpage_categories.each do |cat| %> 
+                        <i class="fa fa-th-large text-primary"></i>
+                        <%= cat.category_name %><hr class="margin-5">
+                    <% end %>
+                  <% end %>
+               </td>
+
+               <td>
+                  <%= link_to "#{(effort.user.fullname.humanize)}", user_path(effort.user_id), target: :_blank if effort.user_id.present? %>
+               </td>
+               <td> <%= effort.notes.humanize rescue "" %> </td>
+
+               <td>
+                  <% if effort.status_url.present? %>
+                    <% effort.status_url.each_line do |line| %>
+                        <% if is_valid_url(line.strip) %>    <%# .strip here removed trailing space %>
+                           <%= link_to line, target: '_blank' do %>
+                              <p style="word-break: break-all;"><%= line %></p>
+                           <% end %>  
+                        <% else %>
+                           <p style="word-break: break-all;"><%= line.humanize %></p>
+                        <% end %>
+                     <% end %>
+                  <% end %>
+               </td>
+
+                  
+                  <%#= link_to truncate(effort.status_url, length: 80, omission: " ...#{effort.status_url[-30, 30]}"), effort.status_url, target: :_blank if effort.status_url.present? %>
+               </td>
+
+
+               <td>
+                     <%= link_to effort_qa_comments_path(effort_id: effort.id), data: { toggle: 'tooltip'}, title: 'View Comments' do %> 
+                        <i class="fa fa-comments fa-fw"> </i>
+                     <% end %>
+                     <%= simple_format(effort.qa, style: "display: block; max-width: 350px") rescue "" %>
+                  <% if effort.qa.nil? %>
+                     <%= simple_format(effort.qa_comments.first.comment, style: "display: inline-block; max-width: 350px") rescue "" %>
+                  <% end %>
+               </td>
+
+
+
+            </tr>
+            <% end %>
+         </tbody>
+         <tfoot>
+            <tr>
+               <td colspan="6">
+                  <ul class="pagination pull-right">
+                     <%= paginate @effort %>
+                     <%= page_entries_info @effort %>
+                  </ul>
+               </td>
+            </tr>
+         </tfoot>
+   
+      </table>
+
+   </div>
+ 
+</div>
+</div>
+   <!-- /.box-body -->
+</div>
+
+
+ <script>
+
+function effectLoad(){
+        $(document).ready(function() {
+            $('.footable').footable({ paginate:false });
+        });
+}
+
+effectLoad();
+
+
+// https://bootstrap-datepicker.readthedocs.io/en/latest/
+$(document).ready(function(){
+   
+   
+      $('#start_date, #end_date').datepicker({
+          format: "yyyy-mm-dd"
+      });
+//----------------------------------------------
+
+    $("form.filter-form").submit(function(){
+       
+       // Change 'form' to class or ID of your specific form
+      	$(this).find(".skip-empty").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+      	return true; // ensure form still submits
+    });
+      	
+    // Un-disable form fields when page loads, in case they click back after submission
+    $( "form.filter-form" ).find( ".skip-empty" ).prop( "disabled", false );
+});
+
+  </script>

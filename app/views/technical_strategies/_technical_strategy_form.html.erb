@@ -1,0 +1,21 @@
+<%= form_for(@tech_strategy, remote: true) do |f| %>
+
+<div id="error_explanation" class="bg-danger text-danger">
+ </div> 
+      
+      <div class="form-group">
+        <%= f.label :description, "<i class='fa fa-align-justify margin-r-5'> </i> Description".html_safe %>
+        <%= f.text_area :description, class: 'form-control', rows: '4' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :notes, "<i class='fa fa-file-text-o margin-r-5'> </i> Notes".html_safe %> 
+        <%= f.text_area :notes, class: 'form-control', rows: '4' %>
+      </div>
+      
+  <div class="actions">
+     <%= f.button  @tech_strategy.new_record? ? "Create" : "Update", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait..."} %>
+     <%#= f.button "Proceed", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+  
+  </div>
+<% end %>

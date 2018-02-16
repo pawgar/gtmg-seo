@@ -1,0 +1,49 @@
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>GTMG</b>SEO</a>
+  </div>
+  
+  <% if alert %>
+  <div class="box box-solid">
+    <div class="login_error">
+         <%= alert.html_safe %>
+    </div>
+  </div>
+  <% elsif notice %>
+  <div class="box box-solid">
+    <div class="login_notice">
+         <%= notice.html_safe %>
+    </div>
+  </div>
+  <% end %>
+
+
+
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+
+        <div class="text-center">
+           <h2 class="box-title">Password Reset</h2>
+           <p>
+              Please enter your email address.
+           </p>
+           <%= form_for(:password_reset, url: password_resets_path) do |f| %>
+           <div class="form-group">
+              <%= f.email_field :email, class: 'form-control', placeholder: 'email' %>
+           </div>
+           <div class="form-group">
+              <%= button_tag "Reset my password", :class => "btn btn-block btn-success btn-flat", data: {disable_with: "<i class='fa fa-refresh fa-spin'></i> Please wait..."} %>
+           </div>
+           <% end %>
+           
+           <a href="/register" class="text-center">Register a new membership</a>
+        </div>
+
+
+    
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+

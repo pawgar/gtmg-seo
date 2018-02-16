@@ -1,0 +1,15 @@
+<div class="row">
+    
+    <%= form_tag import_strategy_file_path, multipart: true do %>
+        <div class="col-md-8">
+          <%= file_field_tag :strategy_file, class: "form-control" %>
+        </div>
+         
+        <div class="col-md-4">
+          <%= button_tag class: "btn btn-success btn-block btn-flat pull-right form-control" do %>
+                 <i class="fa fa-upload"> </i> Upload!
+          <% end %>
+        </div>
+    <% end %>
+
+</div>

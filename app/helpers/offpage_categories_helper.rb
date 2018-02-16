@@ -1,0 +1,2 @@
+module OffpageCategoriesHelper
+end

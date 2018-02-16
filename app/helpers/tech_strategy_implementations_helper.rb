@@ -1,0 +1,2 @@
+module TechStrategyImplementationsHelper
+end
