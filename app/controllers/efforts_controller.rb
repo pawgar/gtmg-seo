@@ -41,7 +41,7 @@ class EffortsController < ApplicationController
        date_check(params[:start_date] ||= nil, params[:end_date] ||= nil)
  
        effort_i = Effort.get_range_all(params[:start_date], params[:end_date]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
-        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(20)
+        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
         flash.now[:notice] = "Showing result for all data from '#{@start_date} to #{@end_date}'".html_safe
      @header_title = ""
 
