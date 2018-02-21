@@ -78,10 +78,11 @@ private
       dimensions = 'ga:keyword'
       metrics = 'ga:sessions' #'ga:pageviews'
       #filters = 'ga:pagePath==/url/to/user'     59days   30days      .... 57days  28days
+      filters = 'ga:country!=India,ga:country!=Philippines,ga:country!=Russia,ga:country!=China'
       sort = '-ga:sessions'
 
       result = analytics.get_ga_data(@ids, start_date, end_date, metrics, dimensions: dimensions, sort: sort)
-      @traffic_source = analytics.get_ga_data(@ids, start_date, end_date, metrics, dimensions: 'ga:country,ga:source', sort: '-ga:sessions', max_results: 10)
+      @traffic_source = analytics.get_ga_data(@ids, start_date, end_date, metrics, dimensions: 'ga:country,ga:source', sort: '-ga:sessions', filters: filters, max_results: 10)
       @page_views = analytics.get_ga_data(@ids, start_date, end_date, 'ga:pageviews', dimensions: 'ga:pageTitle', sort: '-ga:pageviews', max_results: 10)
       @realtime = analytics.get_realtime_data(@ids, 'rt:activeUsers', dimensions: 'rt:medium,rt:source,rt:country')
 
