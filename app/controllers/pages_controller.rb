@@ -78,7 +78,7 @@ private
       dimensions = 'ga:keyword'
       metrics = 'ga:sessions' #'ga:pageviews'
       #filters = 'ga:pagePath==/url/to/user'     59days   30days      .... 57days  28days
-      filters = 'ga:country!=India,ga:country!=Philippines,ga:country!=Russia,ga:country!=China'
+      filters = 'ga:country!=India;ga:country!=Philippines;ga:country!=Russia;ga:country!=China'
       sort = '-ga:sessions'
 
       result = analytics.get_ga_data(@ids, start_date, end_date, metrics, dimensions: dimensions, sort: sort)
