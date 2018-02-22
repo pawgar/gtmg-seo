@@ -71,7 +71,7 @@ class EffortsController < ApplicationController
       
       flash.now[:notice] = "Showing result for '<i><b>#{client_name}</b></i>'".html_safe
       effort_i = Effort.includes(:user).search(params[:client]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
-       @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(20)
+       @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
      @effCount = effort_i.count
     effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
 
@@ -99,14 +99,14 @@ class EffortsController < ApplicationController
       flash.now[:notice] = "Showing result for '<i><b>#{client_name}</b></i>' from '#{@start_date} to #{@end_date}' ".html_safe
       effort_i = Effort.get_range(params[:client], params[:start_date], params[:end_date]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
       @effCount = effort_i.count
-        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(20)
+        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
      effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
 
       @header_title = client_name
     else
         effort_i = @mySite.clients.first.efforts.includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
         
-        @effort = effort_i.order('date DESC', 'strategies.code ASC').page(params[:page]).per(20)
+        @effort = effort_i.order('date DESC', 'strategies.code ASC').page(params[:page]).per(200)
       @effCount = effort_i.count
      effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
 
