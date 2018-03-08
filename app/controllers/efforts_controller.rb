@@ -12,7 +12,7 @@ class EffortsController < ApplicationController
     if ( params[:client] and (!params[:start_date] and !params[:end_date]) )
             
        effort_i = Effort.includes(:user).search(params[:client]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
-        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(20)
+        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
 
      client_name = ( effort_i.first.present? ? effort_i.first.client.name : Client.find(params[:client]).name )
      flash.now[:notice] = "Showing result for '<i><b>#{client_name}</b></i>'".html_safe
@@ -27,7 +27,7 @@ class EffortsController < ApplicationController
         date_check(params[:start_date] ||= nil, params[:end_date] ||= nil)
  
        effort_i = Effort.get_range(params[:client], params[:start_date], params[:end_date]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
-        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(20)
+        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
 
      client_name = ( effort_i.first.present? ? effort_i.first.client.name : Client.find(params[:client]).name )
      flash.now[:notice] = "Showing result for '<i><b>#{client_name}</b></i>' from '#{@start_date} to #{@end_date}'".html_safe
@@ -369,6 +369,8 @@ private
 
           respond_to do |format|
               format.html
+              format.xlsx
+
               format.pdf do
                 #@tech_strat = tech_strat
                 render pdf:     "Efforts-report", # Excluding ".pdf" extension.
