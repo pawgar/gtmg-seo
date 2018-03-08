@@ -369,7 +369,7 @@ private
 
           respond_to do |format|
               format.html
-              format.xlsx
+              
 
               format.pdf do
                 #@tech_strat = tech_strat

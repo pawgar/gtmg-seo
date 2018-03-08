@@ -1,0 +1,18 @@
+wb = xlsx_package.workbook
+
+# Create a style we can use for record headers
+styles = xlsx_package.workbook.styles
+header_style = styles.add_style bold: true,
+                                alignment: { horizontal: :left }
+
+
+wb.add_worksheet(name: "Buttons") do |sheet|
+
+
+  sheet.add_row ['Date', 'Task', 'Category', 'Assigned User', 'Notes', 'Status Url', 'QA Feedback'], style: header_style
+
+  @eff.each do |effort|
+  	rt = [effort.id], style: header_style
+    sheet.add_row ['test', rt]
+  end
+end

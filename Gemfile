@@ -50,6 +50,10 @@ gem 'google-api-client', '~> 0.11'
 gem 'googleauth' #used in server to server auth in GA
 gem 'googlecharts'
 
+#xlsx exporting feature
+gem 'axlsx', '2.1.0.pre' #require rubyzip >= 1.1.0
+gem 'axlsx_rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

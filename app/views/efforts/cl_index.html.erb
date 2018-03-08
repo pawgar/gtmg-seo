@@ -75,6 +75,12 @@
                           <% end %>
 
                         </li>
+                        <li class="divider"></li>
+                        <li>
+                           <%= link_to efforts_report_path(client: params[:client], start_date: params[:start_date], end_date: params[:end_date], :format=>:xlsx) do %> <i class="fa fa-file-pdf-o text-orange"> </i> Download as Excel
+                           <% end %>    
+                        </li>
+
                       </ul>
                     </div>
                   </div>
@@ -193,7 +199,7 @@
          </tbody>
          <tfoot>
             <tr>
-               <td colspan="6">
+               <td colspan="7">
                   <ul class="pagination pull-right">
                      <%= paginate @effort %>
                      <%= page_entries_info @effort %>

@@ -59,7 +59,7 @@
             </tr>
          </thead>
     <tbody>
-      <% @effort.each do |effort| %>
+      <% effort.each do |effort| %>
         <tr class="box-tools" height="70px">
           <td> 
               <%= effort.date.strftime('%Y-%m-%d') if effort.date.present? %>

@@ -19,8 +19,11 @@ default: &default
 
 development:
   <<: *default
-  database: gtmg-seo-dev
-  host: localhost
+  #database: gtmg-seo-dev
+  #host: localhost
+  username: b9248543cc0824
+  password: 74272ebc
+  database: heroku_d0c1d8b62051b18
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
