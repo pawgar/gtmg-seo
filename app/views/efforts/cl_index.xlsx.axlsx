@@ -1,18 +1,40 @@
 wb = xlsx_package.workbook
 
-# Create a style we can use for record headers
-styles = xlsx_package.workbook.styles
-header_style = styles.add_style bold: true,
-                                alignment: { horizontal: :left }
+header_s = wb.styles.add_style(b: 1)
 
 
-wb.add_worksheet(name: "Buttons") do |sheet|
 
 
-  sheet.add_row ['Date', 'Task', 'Category', 'Assigned User', 'Notes', 'Status Url', 'QA Feedback'], style: header_style
+wb.add_worksheet(name: "Efforts") do |sheet|
+		sheet.add_row ['Date', 'Task', 'Category', 'Assigned User', 'Notes', 'Status URL', 'QA Feedback'], style: [header_s, header_s, header_s, header_s, header_s, header_s, header_s], widths: [10, 30, 20, 20, 1, 30, 30]
 
-  @eff.each do |effort|
-  	rt = [effort.id], style: header_style
-    sheet.add_row ['test', rt]
-  end
+
+  #rt = Axlsx::RichText.new
+  #rt.add_run('I\'m bold, ', :b => true)
+
+
+	@eff_excel.each do |effort|
+
+ e_date_xlsx = effort.date.present? ? effort.date.strftime('%Y-%m-%d') : ""
+ e_strategy_xlsx = effort.strategy.present? ? "#{effort.strategy.code} : #{effort.strategy.description.humanize}"  : ""
+ e_offpage_categories_xlsx = effort.strategy.present? ? effort.strategy.offpage_categories.map{|cat| cat.category_name}.join(", ") : ""
+ e_user_xlsx = effort.user.fullname.humanize rescue ""
+ e_notes_xlsx = effort.notes.humanize rescue ""
+ e_status_url_xlsx = effort.status_url.present? ? effort.status_url.each_line{|line| puts line }: ""
+ e_qa_xlsx = effort.qa.nil? ? "#{effort.qa_comments.first.comment rescue ""}" : "#{effort.qa.humanize rescue ""}"
+
+    	sheet.add_row [e_date_xlsx, e_strategy_xlsx, e_offpage_categories_xlsx, e_user_xlsx, e_notes_xlsx, e_status_url_xlsx, e_qa_xlsx]
+    	#sheet.add_hyperlink :location => 'https://github.com/randym/axlsx', :ref => sheet.rows.first.cells.first
+  	end
+
 end
+
+
+
+
+
+
+
+
+
+

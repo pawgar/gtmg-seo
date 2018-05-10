@@ -19,7 +19,7 @@ class EffortsController < ApplicationController
      @header_title = client_name
 
       @effCount = effort_i.count
-      effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+      effort_pdf = effort_i #.limit(260).order('date ASC', 'strategies.id ASC')
 
 
     elsif (params[:client] and (params[:start_date] or params[:end_date]) )
@@ -34,7 +34,7 @@ class EffortsController < ApplicationController
      @header_title = client_name
 
       @effCount = effort_i.count
-      effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+      effort_pdf = effort_i #.limit(260).order('date ASC', 'strategies.id ASC')
 
     elsif (!params[:client] and (params[:start_date] or params[:end_date]) )
 
@@ -46,7 +46,7 @@ class EffortsController < ApplicationController
      @header_title = ""
 
       @effCount = effort_i.count
-      effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+      effort_pdf = effort_i #.limit(260).order('date ASC', 'strategies.id ASC')
       
     else
        effort_i = Effort.includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
@@ -55,7 +55,7 @@ class EffortsController < ApplicationController
         flash.now[:notice] = "Showing result for all data.".html_safe
 
       @effCount = effort_i.count
-      effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+      effort_pdf = effort_i #.limit(260).order('date ASC', 'strategies.id ASC')
     end
     
     pdf_blows(effort_pdf)
@@ -73,7 +73,7 @@ class EffortsController < ApplicationController
       effort_i = Effort.includes(:user).search(params[:client]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
        @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
      @effCount = effort_i.count
-    effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+    effort_pdf = effort_i #.limit(260).order('date ASC', 'strategies.id ASC')
 
       @header_title = client_name
       
@@ -100,7 +100,7 @@ class EffortsController < ApplicationController
       effort_i = Effort.get_range(params[:client], params[:start_date], params[:end_date]).includes(:client, :user, {strategy: [:offpage_categories]}, :qa_comments)
       @effCount = effort_i.count
         @effort = effort_i.order('date DESC', 'strategies.id ASC').page(params[:page]).per(200)
-     effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+     effort_pdf = effort_i #.limit(260).order('date ASC', 'strategies.id ASC')
 
       @header_title = client_name
     else
@@ -108,7 +108,7 @@ class EffortsController < ApplicationController
         
         @effort = effort_i.order('date DESC', 'strategies.code ASC').page(params[:page]).per(200)
       @effCount = effort_i.count
-     effort_pdf = effort_i.limit(260).order('date ASC', 'strategies.id ASC')
+     effort_pdf = effort_i
 
         @header_title = @effort.present? ? @effort.first.client.name : ''
     end
@@ -339,7 +339,6 @@ private
 
   def check_efforts_table
       efforts_record = Effort.where.not(client_id: nil).exists?
-      
       unless efforts_record
           redirect_to empty_effort_record_path
       end
@@ -365,7 +364,8 @@ private
   end
 
   def pdf_blows(effort_pdf)
-        @eff = effort_pdf
+        @eff = effort_pdf.limit(260).order('date ASC', 'strategies.id ASC')
+        @eff_excel = effort_pdf.order('date ASC', 'strategies.id ASC')
 
           respond_to do |format|
               format.html
@@ -391,6 +391,10 @@ private
                   left: 0,
                   right: 0 }
               end
+
+              format.xlsx {
+                response.headers['Content-Disposition'] = 'attachment; filename="efforts.xlsx"'
+              }
         end
   end 
 

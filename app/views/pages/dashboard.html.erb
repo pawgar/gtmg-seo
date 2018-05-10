@@ -1000,15 +1000,21 @@ jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function () {
                        <th style="width: 40px">Sessions</th>
                     </tr>
 
-                    <% @traffic_source.rows.each_with_index do |analytics, i| %>
-                    <tr>
-                       <td> <%= i +1 %></td>
-                       <td><%= analytics[1] %></td>
-                       <td>
-                        <%= analytics[0] %>
-                       </td>
-                       <td><%= analytics[2] %></td>
-                    </tr>
+                    <% if @traffic_source.rows.nil? %>
+                      <tr>
+                         <td colspan="4" class="text-center"> No data! </td>
+                      </tr>
+                    <% else %>
+                      <% @traffic_source.rows.each_with_index do |analytics, i| %>
+                      <tr>
+                         <td> <%= i +1 %></td>
+                         <td><%= analytics[1] %></td>
+                         <td>
+                          <%= analytics[0] %>
+                         </td>
+                         <td><%= analytics[2] %></td>
+                      </tr>
+                      <% end %>
                     <% end %>
                  </tbody>
               </table>
@@ -1032,12 +1038,19 @@ jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function () {
                        <th># Views</th>
                     </tr>
 
-                    <% @page_views.rows.each_with_index do |analytics, i| %>
-                    <tr>
-                       <td><%= analytics[0] %></td>
-                       <td><%= analytics[1] %></td>
-                    </tr>
+                    <% if @page_views.rows.nil? %>
+                      <tr>
+                         <td colspan="4" class="text-center"> No data! </td>
+                      </tr>
+                    <% else %>
+                      <% @page_views.rows.each_with_index do |analytics, i| %>
+                      <tr>
+                         <td><%= analytics[0] %></td>
+                         <td><%= analytics[1] %></td>
+                      </tr>
+                      <% end %>
                     <% end %>
+
                  </tbody>
               </table>
 
