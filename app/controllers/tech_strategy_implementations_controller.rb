@@ -195,14 +195,18 @@ def process_file
                     case _col_status.downcase.to_s
                     when "done"
                       tsi_stat = 1 #done
+                      comment = nil
                     when "n/a"
                       tsi_stat = 2 #n/a
+                      comment = nil
                     when "pending"
                       tsi_stat = 3 #pending
+                      comment = nil
                     else
                       tsi_stat = 3 #pending
+                      comment = _col_status
                     end
-                    upload_tsi_data << TechStrategyImplementation.new(technical_strategy_id: tech_strategy_id, status: tsi_stat, client_id: client_site)
+                    upload_tsi_data << TechStrategyImplementation.new(technical_strategy_id: tech_strategy_id, status: tsi_stat, client_id: client_site, comments: comment)
                   else
         				    upload_tsi_data_skipped << {ts_line: ts_counter, status: _col_status}
                   end
