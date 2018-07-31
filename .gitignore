@@ -24,7 +24,6 @@ config/database.yml
 config/GTMGseo-bcbbbc941baf.json
 config/secrets.yml
 
-
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep

@@ -1,5 +1,4 @@
 <% @header_title = "Technical Strategies" %>
-<%# @menu_user = "active" %>
 
           <div class="box" id="strategy_list">
             <div id="strategy_list_x">
@@ -33,7 +32,7 @@
                                 <%= link_to edit_technical_strategy_path(tech_strat.id), remote: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}, class: "btn btn-box-tool"  do %>
                                 <i class="fa fa-edit text-blue"></i> 
                                 <% end %>
-                                &nbsp; : &nbsp
+                                &nbsp; : &nbsp;
                                 <%= link_to tech_strat, method: :delete, data: { confirm: 'Are you sure?' }, title: 'delete' do %>
                                 <i class="fa fa-trash-o text-red"></i>
                                 <% end %>
