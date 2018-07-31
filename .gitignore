@@ -12,14 +12,18 @@
 /test
 /test/tmp/
 /test/version_tmp/
+/public/efforts_files
+/public/upload
 
 
 # Ignore bundler config.
 /.bundle
 
-/config/initializers/env.rb
-/config/database.yml
-/config/GTMGseo-bcbbbc941baf.json
+config/initializers/env.rb
+config/database.yml
+config/GTMGseo-bcbbbc941baf.json
+config/secrets.yml
+
 
 # Ignore all logfiles and tempfiles.
 /log/*
